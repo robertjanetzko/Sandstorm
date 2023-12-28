@@ -13,6 +13,8 @@ module type Sig = sig
   val all : unit -> Entity.id_t Seq.t
 end
 
+let allComponents : (module Sig) list ref = ref []
+
 let create (type s) () =
   let module Def = struct
     type t = s
@@ -39,7 +41,9 @@ let create (type s) () =
     ;;
   end
   in
-  (module Def : Sig with type t = s)
+  let m = (module Def : Sig with type t = s) in
+  allComponents := (module Def) :: !allComponents;
+  m
 ;;
 
 let all (module C : Sig) = C.all ()

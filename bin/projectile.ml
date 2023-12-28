@@ -16,11 +16,18 @@ module S = struct
   include (val System.create2 process (module C) (module Position))
 end
 
+module Cleanup = struct
+  let process id (_impact : Collision.Impact.t) (_c : C.s) = destroy_entity id
+
+  include (val System.create2 process (module Collision.Impact) (module C))
+end
+
 let create pos velocity =
   Entity.create
     [ Position.create pos
     ; C.create { velocity }
     ; ShapeRenderer.C.create (Circle (5., Color.white))
     ; Collision.Shape.create (Circle 5.)
+    ; Components.Damage.create { amount = 1. }
     ]
 ;;

@@ -10,3 +10,8 @@ module World = World
 
 let query = Component.query2
 let ( ^? ) = query
+
+let destroy_entity id =
+  let modules = !Component.allComponents in
+  List.iter (fun (module M : Component.Sig) -> M.remove id) modules
+;;

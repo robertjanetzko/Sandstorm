@@ -17,7 +17,7 @@ module S = struct
     match p with
     | Some (_, p) ->
       let dir = Vector2.subtract p pos |> Vector2.normalize in
-      let velocity = Vector2.scale dir 100. in
+      let velocity = Vector2.scale dir 600. in
       Projectile.create pos velocity
     | _ -> ()
   ;;

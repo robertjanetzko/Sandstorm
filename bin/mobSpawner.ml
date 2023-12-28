@@ -25,6 +25,7 @@ module S = struct
       ; Follow.C.create ()
       ; MobTag.create ()
       ; Collision.Shape.create (Circle 10.)
+      ; Components.Health.create { current = 1.; max = 1. }
       ]
   ;;
 
