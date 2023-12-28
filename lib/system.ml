@@ -23,7 +23,7 @@ let create2
   let module Def = struct
     let process _state =
       C.iter (fun id av ->
-        match C2.get id with
+        match C2.get_opt id with
         | Some bv -> process id av bv
         | None -> ())
     ;;
@@ -41,7 +41,7 @@ let create2_w
   let module Def = struct
     let process state =
       C.iter (fun id av ->
-        match C2.get id with
+        match C2.get_opt id with
         | Some bv -> process state id av bv
         | None -> ())
     ;;

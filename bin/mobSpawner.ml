@@ -2,6 +2,12 @@ open Raylib
 open Engine
 open Engine.DefaultComponents
 
+module MobTag = struct
+  type s = unit
+
+  include (val Component.create () : Component.Sig with type t = s)
+end
+
 module C = struct
   type s = { mutable timer : float }
 
@@ -17,6 +23,8 @@ module S = struct
       [ Position.create pos
       ; ShapeRenderer.C.create (Circle (10., Color.blue))
       ; Follow.C.create ()
+      ; MobTag.create ()
+      ; Collision.Shape.create (Circle 10.)
       ]
   ;;
 

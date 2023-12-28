@@ -12,12 +12,22 @@ module C = struct
 end
 
 module S = struct
+  let fire pos =
+    let p = Position.nearest MobSpawner.MobTag.is pos in
+    match p with
+    | Some (_, p) ->
+      let dir = Vector2.subtract p pos |> Vector2.normalize in
+      let velocity = Vector2.scale dir 100. in
+      Projectile.create pos velocity
+    | _ -> ()
+  ;;
+
   let process _id (c : C.s) pos =
     if c.timer > 0.
     then c.timer <- c.timer -. Raylib.get_frame_time ()
     else (
       c.timer <- c.cooldown;
-      Projectile.create pos (Vector2.create 100. 0.))
+      fire pos)
   ;;
 
   include (val System.create2 process (module C) (module Position))

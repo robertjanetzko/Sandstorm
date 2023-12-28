@@ -11,7 +11,7 @@ functor
     let setup () =
       Raylib.init_window 800 600 "raylib [core] example - mouse input";
       Raylib.set_window_position 0 0;
-      (* Raylib.set_target_fps 120; *)
+      Raylib.set_target_fps 60;
       W.init ()
     ;;
 

@@ -21,5 +21,6 @@ let create pos velocity =
     [ Position.create pos
     ; C.create { velocity }
     ; ShapeRenderer.C.create (Circle (5., Color.white))
+    ; Collision.Shape.create (Circle 5.)
     ]
 ;;
