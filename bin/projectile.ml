@@ -8,19 +8,20 @@ module C = struct
   include (val Component.create () : Component.Sig with type t = s)
 end
 
-module S = struct
-  let process id (c : C.s) pos =
-    Position.set (Vector2.add pos @@ Vector2.scale c.velocity (get_frame_time ())) id
-  ;;
+let system =
+  System.create2r
+    (module C)
+    (module Position)
+    (fun id (c : C.s) pos ->
+      Position.set (Vector2.add pos @@ Vector2.scale c.velocity (get_frame_time ())) id)
+;;
 
-  include (val System.create2 process (module C) (module Position))
-end
-
-module Cleanup = struct
-  let process id (_impact : Collision.Impact.t) (_c : C.s) = destroy_entity id
-
-  include (val System.create2 process (module Collision.Impact) (module C))
-end
+let cleanup_system =
+  System.create2r
+    (module Collision.Impact)
+    (module C)
+    (fun id _impact _c -> destroy_entity id)
+;;
 
 let create pos velocity =
   Entity.create
@@ -28,6 +29,6 @@ let create pos velocity =
     ; C.create { velocity }
     ; ShapeRenderer.C.create (Circle (5., Color.white))
     ; Collision.Shape.create { shape = Circle 5.; mask = 1L }
-    ; Components.Damage.create { amount = 1. }
+    ; Damage.C.create { amount = 1. }
     ]
 ;;

@@ -15,14 +15,10 @@ module Dead = struct
   include (val Component.create () : Component.Sig with type t = s)
 end
 
-module S = struct
-  let process id (health : C.s) = if health.current <= 0. then Dead.create () id
+let system =
+  System.create1r
+    (module C)
+    (fun id health -> if health.current <= 0. then Dead.set () id)
+;;
 
-  include (val System.create1 process (module C))
-end
-
-module Death = struct
-  let process id _ = destroy_entity id
-
-  include (val System.create1 process (module Dead))
-end
+let death_system = System.create1r (module Dead) (fun id _dead -> destroy_entity id)

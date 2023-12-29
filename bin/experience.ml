@@ -19,12 +19,12 @@ module Pickup = struct
     include (val Component.create () : Component.Sig with type t = s)
   end
 
-  module S = struct
-    let process id amount (impact : Collision.Impact.t) =
-      pickup amount impact.other;
-      destroy_entity id
-    ;;
-
-    include (val System.create2 process (module C) (module Collision.Impact))
-  end
+  let system =
+    System.create2r
+      (module C)
+      (module Collision.Impact)
+      (fun id amount impact ->
+        pickup amount impact.other;
+        destroy_entity id)
+  ;;
 end
