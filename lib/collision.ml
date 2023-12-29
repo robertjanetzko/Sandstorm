@@ -6,7 +6,10 @@ type collisionShape =
   | Rect of float * float
 
 module Shape = struct
-  type s = collisionShape
+  type s =
+    { shape : collisionShape
+    ; mask : int64
+    }
 
   include (val Component.create () : Component.Sig with type t = s)
 end
@@ -21,14 +24,19 @@ module Impact = struct
 end
 
 module Detector = struct
+  let match_mask m1 m2 = Int64.logand m1 m2 > 0L
+
   let overlap id1 id2 =
     let p1 = Position.get id1 in
     let p2 = Position.get id2 in
     let s1 = Shape.get id1 in
     let s2 = Shape.get id2 in
-    match s1, s2 with
-    | Circle r1, Circle r2 -> Vector2.distance p1 p2 < r1 +. r2
-    | _ -> false
+    if not @@ match_mask s1.mask s2.mask
+    then false
+    else (
+      match s1.shape, s2.shape with
+      | Circle r1, Circle r2 -> Vector2.distance p1 p2 < r1 +. r2
+      | _ -> false)
   ;;
 
   let detect id1 id2 =
@@ -45,10 +53,7 @@ module Detector = struct
 end
 
 module Cleanup = struct
-  let process id (impact : Impact.s) =
-    Impact.remove id;
-    Raylib.draw_circle_v impact.position 50. Color.red
-  ;;
+  let process id (_impact : Impact.s) = Impact.remove id
 
   include (val System.create1 process (module Impact))
 end

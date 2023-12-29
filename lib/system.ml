@@ -32,6 +32,24 @@ let create2
   (module Def : Sig)
 ;;
 
+let create3
+  (type a b c)
+  (process : Entity.id_t -> a -> b -> c -> unit)
+  (module C : Component.Sig with type t = a)
+  (module C2 : Component.Sig with type t = b)
+  (module C3 : Component.Sig with type t = c)
+  =
+  let module Def = struct
+    let process _state =
+      let pr (id : Entity.id_t) = process id (C.get id) (C2.get id) (C3.get id) in
+      let seq = Component.(!?(module C) >? (module C2) >? (module C3)) in
+      Seq.iter pr seq
+    ;;
+  end
+  in
+  (module Def : Sig)
+;;
+
 let create2_w
   (type a b)
   (process : Game.state_t -> Entity.id_t -> a -> b -> unit)

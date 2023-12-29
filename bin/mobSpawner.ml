@@ -18,14 +18,14 @@ module S = struct
   let spawn () =
     let player_pos = Util.player_pos () in
     let angle = Random.float 6.28318530718 in
-    let pos = Vector2.add player_pos @@ Vector2.rotate (Vector2.create 600. 0.) angle in
+    let pos = Vector2.add player_pos @@ Vector2.rotate (Vector2.create 400. 0.) angle in
     Entity.create
       [ Position.create pos
       ; ShapeRenderer.C.create (Circle (10., Color.blue))
       ; Follow.C.create ()
       ; MobTag.create ()
-      ; Collision.Shape.create (Circle 10.)
-      ; Components.Health.create { current = 1.; max = 1. }
+      ; Collision.Shape.create { shape = Circle 10.; mask = 1L }
+      ; Health.C.create { current = 1.; max = 1. }
       ]
   ;;
 
@@ -41,3 +41,17 @@ module S = struct
 end
 
 let create () = Entity.create [ C.create { timer = 1. } ]
+
+module DropExperience = struct
+  let process _id _dead _tag pos =
+    Entity.create
+      [ Position.create pos
+      ; ShapeRenderer.C.create (Circle (3., Color.yellow))
+      ; Collision.Shape.create { shape = Circle 3.; mask = 2L }
+      ; Experience.Pickup.C.create 100
+      ]
+  ;;
+
+  include
+    (val System.create3 process (module Health.Dead) (module MobTag) (module Position))
+end

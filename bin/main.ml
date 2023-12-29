@@ -10,7 +10,10 @@ module VampireWorld = struct
      ; (module Shooter.S)
      ; (module Projectile.S)
      ; (module Projectile.Cleanup)
-     ; (module Components.Death)
+     ; (module Health.S)
+     ; (module MobSpawner.DropExperience)
+     ; (module Experience.Pickup.S)
+     ; (module Health.Death)
      ; (module MobSpawner.S)
      ; (module Follow.S)
      ; (module FollowCamera.S)
@@ -23,9 +26,12 @@ module VampireWorld = struct
     Entity.create
       [ Position.create @@ Vector2.create 40. 30.
       ; ShapeRenderer.C.create @@ Circle (10., Color.red)
+      ; Collision.Shape.create { shape = Circle 10.; mask = 2L }
       ; PlayerInput.C.create @@ ()
       ; FollowCamera.C.create ()
-      ; Shooter.create 2. (* ; Collision.Shape.create (Circle 10.) *)
+      ; Health.C.create { current = 100.; max = 100. }
+      ; Experience.C.create (ref 0)
+      ; Shooter.create 2.
       ];
     (* Entity.create
        [ Position.create @@ Vector2.create 140. 130.
