@@ -7,8 +7,9 @@ module C = struct
   include (val Component.create () : Component.Sig with type t = s)
 end
 
-module S = struct
-  let follow (state : Game.state_t) _id pos _cam = Camera2D.set_target state.camera pos
-
-  include (val System.create2_w follow (module Position) (module C))
-end
+let system =
+  System.create2w
+    (module Position)
+    (module C)
+    (fun state _id pos _cam -> Camera2D.set_target state.camera pos)
+;;

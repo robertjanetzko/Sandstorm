@@ -20,7 +20,7 @@ module Pickup = struct
   end
 
   let system =
-    System.create2r
+    System.create2
       (module C)
       (module Collision.Impact)
       (fun id amount impact ->

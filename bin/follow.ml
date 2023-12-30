@@ -9,7 +9,7 @@ module C = struct
 end
 
 let system =
-  System.create2r
+  System.create2
     (module C)
     (module Position)
     (fun id _c pos ->

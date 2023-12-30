@@ -16,7 +16,7 @@ let input_direction () =
 ;;
 
 let system =
-  Engine.System.create2r
+  Engine.System.create2
     (module C)
     (module Position)
     (fun id _input pos ->

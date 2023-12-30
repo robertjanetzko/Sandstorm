@@ -7,7 +7,7 @@ module C = struct
 end
 
 let impact_damage_system =
-  System.create2r
+  System.create2
     (module Collision.Impact)
     (module C)
     (fun _id impact damage ->

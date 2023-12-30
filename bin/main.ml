@@ -4,7 +4,7 @@ open Raylib
 
 module VampireWorld = struct
   let systems : (module System.Sig) array =
-    [| (module Collision.Detector)
+    [| Collision.system
      ; Damage.impact_damage_system
      ; PlayerInput.system
      ; Shooter.system
@@ -16,9 +16,9 @@ module VampireWorld = struct
      ; Health.death_system
      ; MobSpawner.system
      ; Follow.system
-     ; (module FollowCamera.S)
-     ; (module ShapeRenderer.S)
-     ; (module Collision.Cleanup)
+     ; FollowCamera.system
+     ; ShapeRenderer.system
+     ; Collision.cleanup_system
     |]
   ;;
 

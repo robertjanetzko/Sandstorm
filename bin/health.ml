@@ -16,9 +16,7 @@ module Dead = struct
 end
 
 let system =
-  System.create1r
-    (module C)
-    (fun id health -> if health.current <= 0. then Dead.set () id)
+  System.create (module C) (fun id health -> if health.current <= 0. then Dead.set () id)
 ;;
 
-let death_system = System.create1r (module Dead) (fun id _dead -> destroy_entity id)
+let death_system = System.create (module Dead) (fun id _dead -> destroy_entity id)

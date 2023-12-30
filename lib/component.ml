@@ -47,9 +47,10 @@ let create (type s) () =
 ;;
 
 let all (module C : Sig) = C.all ()
+let query = all
 let iter fn s = Seq.iter fn s
 let ( !? ) = all
-let query (module C : Sig) (entities : Entity.id_t Seq.t) = Seq.filter C.is entities
-let query2 (entities : Entity.id_t Seq.t) (module C : Sig) = Seq.filter C.is entities
-let ( >? ) = query2
+let aquery (module C : Sig) (entities : Entity.id_t Seq.t) = Seq.filter C.is entities
+let aquery2 (entities : Entity.id_t Seq.t) (module C : Sig) = Seq.filter C.is entities
+let ( >? ) = aquery2
 let ( >! ) = Seq.iter

@@ -9,7 +9,7 @@ module C = struct
 end
 
 let system =
-  System.create2r
+  System.create2
     (module C)
     (module Position)
     (fun id (c : C.s) pos ->
@@ -17,7 +17,7 @@ let system =
 ;;
 
 let cleanup_system =
-  System.create2r
+  System.create2
     (module Collision.Impact)
     (module C)
     (fun id _impact _c -> destroy_entity id)

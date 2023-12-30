@@ -29,7 +29,7 @@ let spawn () =
 ;;
 
 let system =
-  System.create1r
+  System.create
     (module C)
     (fun _id spawner ->
       if spawner.timer < 0.
@@ -51,7 +51,7 @@ let spawn_experience_pickup pos =
 ;;
 
 let mob_killed_system =
-  System.create3r
+  System.create3
     (module Health.Dead)
     (module MobTag)
     (module Position)
