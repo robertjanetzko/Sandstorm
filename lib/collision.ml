@@ -1,5 +1,5 @@
 open Raylib
-open DefaultComponents
+open Default_components
 
 type collisionShape =
   | Circle of float
@@ -25,17 +25,24 @@ end
 
 let match_mask m1 m2 = Int64.logand m1 m2 > 0L
 
-let overlap id1 id2 =
-  let p1 = Position.get id1 in
-  let p2 = Position.get id2 in
-  let s1 = Shape.get id1 in
-  let s2 = Shape.get id2 in
-  if not @@ match_mask s1.mask s2.mask
+let overlap ?(new_p1 = None) id1 id2 =
+  if id1 == id2
   then false
   else (
-    match s1.shape, s2.shape with
-    | Circle r1, Circle r2 -> Vector2.distance p1 p2 < r1 +. r2
-    | _ -> false)
+    let p1 =
+      match new_p1 with
+      | Some p -> p
+      | None -> Position.get id1
+    in
+    let p2 = Position.get id2 in
+    let s1 = Shape.get id1 in
+    let s2 = Shape.get id2 in
+    if not @@ match_mask s1.mask s2.mask
+    then false
+    else (
+      match s1.shape, s2.shape with
+      | Circle r1, Circle r2 -> Vector2.distance p1 p2 < r1 +. r2
+      | _ -> false))
 ;;
 
 let detect id1 id2 =

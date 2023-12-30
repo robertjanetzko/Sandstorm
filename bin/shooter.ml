@@ -8,7 +8,7 @@ module C = struct
   include (val Component.create () : Component.Sig with type t = s)
 end
 
-let create cooldown = C.create { timer = Timer.create cooldown }
+let create cooldown = C.create { timer = Timer.delay cooldown }
 
 let fire pos =
   let p = Position.nearest MobSpawner.MobTag.is pos in

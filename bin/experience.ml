@@ -53,7 +53,7 @@ let level_up_system =
   System.create_q2
     (query2 (module C) (module Level) >&& (module PlayerInput.C))
     (fun id amount level ->
-      if !amount >= 100 * level
+      if !amount >= 1000 * level
       then (
         Level.set (level + 1) id;
         Menu.show ()))

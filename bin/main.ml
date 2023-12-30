@@ -22,18 +22,27 @@ module VampireWorld = struct
           ; Collision.cleanup_system
           ; MobSpawner.system
           ; Follow.system
+          ; SpriteRenderer.animation_system
          |]
+     ; FollowCamera.system
     |]
   ;;
 
-  let render_systems = [| FollowCamera.system; ShapeRenderer.system |]
+  let render_systems = [| SpriteRenderer.system; ShapeRenderer.system |]
   let ui_systems = [| Experience.ui_system; Menu.menu_ui_system |]
 
   let init () =
     Entity.create
       [ Position.create @@ Vector2.create 40. 30.
-      ; ShapeRenderer.C.create @@ Circle (10., Color.red)
-      ; Collision.Shape.create { shape = Circle 10.; mask = 2L }
+        (* ; ShapeRenderer.C.create @@ Circle (10., Color.red) *)
+      ; SpriteRenderer.create_sprite_sheet
+          "resources/Warrior_Blue.png"
+          (Vector2.create 0. 0.)
+          (Vector2.create 0.5 0.5)
+          (6, 8)
+      ; SpriteRenderer.create_animator 0 5 0.1
+        (* ; ShapeRenderer.C.create @@ Circle (20., Color.green) *)
+      ; Collision.Shape.create { shape = Circle 20.; mask = 2L }
       ; PlayerInput.C.create @@ ()
       ; FollowCamera.C.create ()
       ; Health.C.create { current = 100.; max = 100. }

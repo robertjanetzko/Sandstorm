@@ -3,7 +3,8 @@ type t =
   ; mutable value : float
   }
 
-let create duration = { duration; value = duration }
+let delay duration = { duration; value = duration }
+let start duration = { duration; value = 0. }
 
 let step t =
   t.value <- t.value -. Raylib.get_frame_time ();

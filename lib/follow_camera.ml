@@ -1,5 +1,5 @@
 open Raylib
-open DefaultComponents
+open Default_components
 
 module C = struct
   type s = unit

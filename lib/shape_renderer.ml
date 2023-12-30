@@ -1,5 +1,5 @@
 open Raylib
-open DefaultComponents
+open Default_components
 
 type shape =
   | Circle of float * Color.t
