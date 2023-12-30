@@ -8,8 +8,10 @@ module ShapeRenderer = ShapeRenderer
 module System = System
 module World = World
 
-let query = Component.aquery2
-let ( ^? ) = query
+let query = Query.query
+let query2 = Query.query2
+let ( >& ) = Query.( >& )
+let ( >&& ) = Query.( >&& )
 
 let destroy_entity id =
   let modules = !Component.allComponents in

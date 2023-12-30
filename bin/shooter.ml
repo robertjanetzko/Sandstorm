@@ -27,7 +27,7 @@ let system =
   System.create2
     (module C)
     (module Position)
-    (fun _id (c : C.s) pos ->
+    (fun _id c pos ->
       if c.timer > 0.
       then c.timer <- c.timer -. Raylib.get_frame_time ()
       else (

@@ -20,9 +20,8 @@ module Pickup = struct
   end
 
   let system =
-    System.create2
-      (module C)
-      (module Collision.Impact)
+    System.create_q2
+      (query2 (module C) (module Collision.Impact))
       (fun id amount impact ->
         pickup amount impact.other;
         destroy_entity id)
@@ -30,10 +29,9 @@ module Pickup = struct
 end
 
 let ui_system =
-  System.create2
-    (module C)
-    (module PlayerInput.C)
-    (fun _id amount _player ->
+  System.create_q
+    (query (module C) >& (module PlayerInput.C))
+    (fun _id amount ->
       let open Raylib in
       let w = get_render_width () in
       let h = get_render_height () in

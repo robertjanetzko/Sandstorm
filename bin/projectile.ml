@@ -9,10 +9,9 @@ module C = struct
 end
 
 let system =
-  System.create2
-    (module C)
-    (module Position)
-    (fun id (c : C.s) pos ->
+  System.create_q2
+    (query2 (module C) (module Position))
+    (fun id c pos ->
       Position.set (Vector2.add pos @@ Vector2.scale c.velocity (get_frame_time ())) id)
 ;;
 

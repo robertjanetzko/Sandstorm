@@ -51,9 +51,7 @@ let spawn_experience_pickup pos =
 ;;
 
 let mob_killed_system =
-  System.create3
-    (module Health.Dead)
-    (module MobTag)
-    (module Position)
-    (fun _id _dead _tag pos -> spawn_experience_pickup pos)
+  System.create_q
+    (query (module Position) >& (module Health.Dead) >& (module MobTag))
+    (fun _id pos -> spawn_experience_pickup pos)
 ;;

@@ -1,40 +1,32 @@
-type 'a comp = (module Component.Sig with type t = 'a)
+type 'a q =
+  { component : (module Component.Sig with type t = 'a)
+  ; conditions : (module Component.Sig) list
+  }
 
-type 'a t =
-  | Component : 'a comp -> 'a t
-  | And : ('a t * 'b t) -> ('a * 'b) t
+type ('a, 'b) q2 =
+  { component1 : (module Component.Sig with type t = 'a)
+  ; component2 : (module Component.Sig with type t = 'b)
+  ; conditions2 : (module Component.Sig) list
+  }
 
-let c (type a) (module C : Component.Sig with type t = a) = Component (module C)
+type 'a qu =
+  | Q : 'a q -> 'a qu
+  | Q2 : ('a, 'b) q2 -> ('a * 'b) qu
 
-let rec run : type a. a t -> (Entity.id_t * a) Seq.t =
-  fun q ->
+let query cmp = Q { component = cmp; conditions = [] }
+let query2 cmp1 cmp2 = Q2 { component1 = cmp1; component2 = cmp2; conditions2 = [] }
+
+let query_with q cond =
   match q with
-  | Component x ->
-    let module Comp = (val x : Component.Sig with type t = a) in
-    Comp.all () |> Seq.map (fun id -> id, Comp.get id)
-  | And (x, y) ->
-    let left = run x in
-    let right = run y in
-    let step _left _right = None in
-    let s2 = Seq.unfold (fun (l, r) -> step l r) (left, right) in
-    s2
+  | Q q1 -> Q { q1 with conditions = cond :: q1.conditions }
+  | _ -> assert false
 ;;
 
-(* | _ -> assert false *)
-
-let test_query_1 = c (module DefaultComponents.Position)
-
-(* let test_query_2 = c (module C) *)
-(* let test_query_3 = And (test_query_1, test_query_2) *)
-(* let test_query_4 = And (test_query_3, c (module Health.C)) *)
-(*     let test_query_5 = And (test_query_4, test_query_3)
-       let r1 = run test_query_1
-       let r2 = run test_query_5 *)
-
-let iterq : type a. a t -> (a -> unit) -> unit =
-  fun q f -> run q |> Seq.iter (fun (_id, v) -> f v)
+let query_with2 q cond =
+  match q with
+  | Q2 q2 -> Q2 { q2 with conditions2 = cond :: q2.conditions2 }
+  | _ -> assert false
 ;;
 
-let () = iterq test_query_1 (fun _p -> ())
-(* let () = iterq test_query_3 (fun ((_a, _b), _c) -> ()) *)
-(* let d (type a) (process : a -> unit) = () *)
+let ( >& ) = query_with
+let ( >&& ) = query_with2
