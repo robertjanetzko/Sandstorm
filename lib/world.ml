@@ -1,5 +1,8 @@
+open Raylib
+
 module type WORLD = sig
   val systems : (module System.Sig) array
+  val ui_systems : (module System.Sig) array
   val init : unit -> unit
 end
 
@@ -9,9 +12,9 @@ functor
   ->
   struct
     let setup () =
-      Raylib.init_window 800 600 "raylib [core] example - mouse input";
-      Raylib.set_window_position 0 0;
-      Raylib.set_target_fps 60;
+      init_window 800 600 "raylib [core] example - mouse input";
+      set_window_position 0 0;
+      set_target_fps 60;
       W.init ()
     ;;
 
@@ -26,21 +29,22 @@ functor
 
     let state : Game.state_t = { camera = default_camera }
 
-    let process_systems state =
-      Array.iter (fun (module S : System.Sig) -> S.process state) W.systems
+    let process_systems systems =
+      Array.iter (fun (module S : System.Sig) -> S.process state) systems
     ;;
 
     let rec loop () =
-      match Raylib.window_should_close () with
-      | true -> Raylib.close_window ()
+      match window_should_close () with
+      | true -> close_window ()
       | false ->
-        Raylib.begin_drawing ();
-        Raylib.clear_background Raylib.Color.black;
-        Raylib.draw_fps 10 10;
-        Raylib.begin_mode_2d state.camera;
-        process_systems state;
-        Raylib.end_mode_2d ();
-        Raylib.end_drawing ();
+        begin_drawing ();
+        clear_background Color.black;
+        draw_fps 10 10;
+        begin_mode_2d state.camera;
+        process_systems W.systems;
+        end_mode_2d ();
+        process_systems W.ui_systems;
+        end_drawing ();
         loop ()
     ;;
 

@@ -3,24 +3,26 @@ open Engine.DefaultComponents
 open Raylib
 
 module VampireWorld = struct
-  let systems : (module System.Sig) array =
+  let systems =
     [| Collision.system
      ; Damage.impact_damage_system
      ; PlayerInput.system
      ; Shooter.system
      ; Projectile.system
-     ; Projectile.cleanup_system
+     ; Experience.Pickup.system
      ; Health.system
      ; MobSpawner.mob_killed_system
-     ; Experience.Pickup.system
      ; Health.death_system
+     ; Projectile.cleanup_system
+     ; Collision.cleanup_system
      ; MobSpawner.system
      ; Follow.system
      ; FollowCamera.system
      ; ShapeRenderer.system
-     ; Collision.cleanup_system
     |]
   ;;
+
+  let ui_systems = [| Experience.ui_system |]
 
   let init () =
     Entity.create
