@@ -3,15 +3,12 @@ open Engine.DefaultComponents
 open Raylib
 
 module C = struct
-  type s =
-    { cooldown : float
-    ; mutable timer : float
-    }
+  type s = { timer : Timer.t }
 
   include (val Component.create () : Component.Sig with type t = s)
 end
 
-let create cooldown = C.create { cooldown; timer = cooldown }
+let create cooldown = C.create { timer = Timer.create cooldown }
 
 let fire pos =
   let p = Position.nearest MobSpawner.MobTag.is pos in
@@ -27,10 +24,5 @@ let system =
   System.create2
     (module C)
     (module Position)
-    (fun _id c pos ->
-      if c.timer > 0.
-      then c.timer <- c.timer -. Raylib.get_frame_time ()
-      else (
-        c.timer <- c.cooldown;
-        fire pos))
+    (fun _id c pos -> if Timer.step c.timer then fire pos)
 ;;

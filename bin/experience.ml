@@ -42,3 +42,19 @@ let ui_system =
       let msg_w = Raylib.measure_text msg 10 in
       Raylib.draw_text msg ((w - msg_w) / 2) (h - 10) 10 Color.white)
 ;;
+
+module Level = struct
+  type s = int
+
+  include (val Component.create () : Component.Sig with type t = s)
+end
+
+let level_up_system =
+  System.create_q2
+    (query2 (module C) (module Level) >&& (module PlayerInput.C))
+    (fun id amount level ->
+      if !amount >= 100 * level
+      then (
+        Level.set (level + 1) id;
+        Menu.show ()))
+;;

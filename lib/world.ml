@@ -2,6 +2,7 @@ open Raylib
 
 module type WORLD = sig
   val systems : (module System.Sig) array
+  val render_systems : (module System.Sig) array
   val ui_systems : (module System.Sig) array
   val init : unit -> unit
 end
@@ -37,11 +38,12 @@ functor
       match window_should_close () with
       | true -> close_window ()
       | false ->
+        process_systems W.systems;
         begin_drawing ();
         clear_background Color.black;
         draw_fps 10 10;
         begin_mode_2d state.camera;
-        process_systems W.systems;
+        process_systems W.render_systems;
         end_mode_2d ();
         process_systems W.ui_systems;
         end_drawing ();

@@ -7,6 +7,7 @@ module Game = Game
 module ShapeRenderer = ShapeRenderer
 module System = System
 module World = World
+module Timer = Timer
 
 let query = Query.query
 let query2 = Query.query2

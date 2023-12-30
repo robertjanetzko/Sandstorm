@@ -118,3 +118,13 @@ let create2w
   in
   (module Def : Sig)
 ;;
+
+let create_group ?(condition = fun _ -> true) systems =
+  let module Def = struct
+    let process state =
+      if condition state then Array.iter (fun (module S : Sig) -> S.process state) systems
+    ;;
+  end
+  in
+  (module Def : Sig)
+;;

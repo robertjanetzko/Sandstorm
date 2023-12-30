@@ -9,7 +9,7 @@ module MobTag = struct
 end
 
 module C = struct
-  type s = { mutable timer : float }
+  type s = { timer : Timer.t }
 
   include (val Component.create () : Component.Sig with type t = s)
 end
@@ -29,17 +29,10 @@ let spawn () =
 ;;
 
 let system =
-  System.create
-    (module C)
-    (fun _id spawner ->
-      if spawner.timer < 0.
-      then (
-        spawner.timer <- 1.;
-        spawn ())
-      else spawner.timer <- spawner.timer -. get_frame_time ())
+  System.create (module C) (fun _id spawner -> if Timer.step spawner.timer then spawn ())
 ;;
 
-let create () = Entity.create [ C.create { timer = 1. } ]
+let create () = Entity.create [ C.create { timer = Timer.create 1. } ]
 
 let spawn_experience_pickup pos =
   Entity.create
