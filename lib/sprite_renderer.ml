@@ -23,10 +23,15 @@ let create_sprite_sheet texture anchor scale grid =
   C.create { texture; anchor; scale; index = 0; grid }
 ;;
 
+type animation_t =
+  { from_index : int
+  ; to_index : int
+  ; mirrored : bool
+  }
+
 module A = struct
   type s =
-    { from_index : int
-    ; to_index : int
+    { mutable animation : animation_t
     ; timer : Timer.t
     }
 
@@ -34,19 +39,28 @@ module A = struct
 end
 
 let create_animator from_index to_index duration =
-  A.create { from_index; to_index; timer = Timer.start duration }
+  A.create
+    { animation = { from_index; to_index; mirrored = false }
+    ; timer = Timer.start duration
+    }
 ;;
 
 let system =
   System.create2
     (module Position)
     (module C)
-    (fun _id pos { texture; anchor; scale; index; grid = cols, rows } ->
+    (fun id pos { texture; anchor; scale; index; grid = cols, rows } ->
       let w = Texture.width texture / cols in
       let h = Texture.height texture / rows in
       let xi = index mod cols in
       let yi = index / cols in
       let sign x = if x < 0. then -1. else 1. in
+      let scale =
+        match A.get_opt id with
+        | Some { animation = { mirrored = true; _ }; _ } ->
+          Vector2.reflect (Vector2.create 0. 1.) scale
+        | _ -> scale
+      in
       let rect =
         Rectangle.create
           (float_of_int (w * xi))
@@ -67,10 +81,15 @@ let animation_system =
     (module A)
     (module C)
     (fun _id a c ->
-      if c.index < a.from_index || c.index > a.to_index then c.index <- a.from_index;
+      if c.index < a.animation.from_index || c.index > a.animation.to_index
+      then c.index <- a.animation.from_index;
       if Timer.step a.timer
       then (
-        let new_index = if c.index + 1 <= a.to_index then c.index + 1 else a.from_index in
+        let new_index =
+          if c.index + 1 <= a.animation.to_index
+          then c.index + 1
+          else a.animation.from_index
+        in
         c.index <- new_index))
 ;;
 (* draw_texture_v texture (Vector2.create x y) Color.white) *)
