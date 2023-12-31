@@ -15,12 +15,12 @@ module C = struct
   include (val Component.create () : Component.Sig with type t = s)
 end
 
-let create_sprite file anchor scale =
-  C.create { texture = load_texture file; anchor; scale; index = 0; grid = 1, 1 }
+let create_sprite texture anchor scale =
+  C.create { texture; anchor; scale; index = 0; grid = 1, 1 }
 ;;
 
-let create_sprite_sheet file anchor scale grid =
-  C.create { texture = load_texture file; anchor; scale; index = 0; grid }
+let create_sprite_sheet texture anchor scale grid =
+  C.create { texture; anchor; scale; index = 0; grid }
 ;;
 
 module A = struct
@@ -46,14 +46,15 @@ let system =
       let h = Texture.height texture / rows in
       let xi = index mod cols in
       let yi = index / cols in
+      let sign x = if x < 0. then -1. else 1. in
       let rect =
         Rectangle.create
           (float_of_int (w * xi))
           (float_of_int (h * yi))
-          (float_of_int w)
-          (float_of_int h)
+          (float_of_int w *. (sign @@ Vector2.x scale))
+          (float_of_int h *. (sign @@ Vector2.y scale))
       in
-      let dw = float_of_int w *. Vector2.x scale in
+      let dw = float_of_int w *. (abs_float @@ Vector2.x scale) in
       let dh = float_of_int h *. Vector2.y scale in
       let x = Vector2.x pos +. ((Vector2.x anchor -. 0.5) *. dw) in
       let y = Vector2.y pos +. ((Vector2.y anchor -. 0.5) *. dh) in

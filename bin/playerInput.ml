@@ -17,10 +17,9 @@ let input_direction () =
 
 let system =
   Engine.System.create_q
-    (query (module Position) >& (module C))
-    (fun id pos ->
+    (query (module C) >& (module Velocity))
+    (fun id _input ->
       let dir = input_direction () in
-      let vel = Vector2.scale dir (150. *. get_frame_time ()) in
-      let new_pos = Vector2.add pos vel in
-      Position.set new_pos id)
+      let vel = Vector2.scale dir 150. in
+      Velocity.set vel id)
 ;;

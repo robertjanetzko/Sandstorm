@@ -19,9 +19,11 @@ let spawn () =
   let angle = Random.float 6.28318530718 in
   let pos = Vector2.add player_pos @@ Vector2.rotate (Vector2.create 400. 0.) angle in
   Entity.create
-    [ Position.create pos (* ; ShapeRenderer.C.create (Circle (20., Color.blue)) *)
+    [ Position.create pos
+    ; Velocity.create @@ Vector2.zero ()
+      (* ; ShapeRenderer.C.create (Circle (20., Color.blue)) *)
     ; SpriteRenderer.create_sprite_sheet
-        "resources/Torch_Red.png"
+        (Textures.mob ())
         (Vector2.create 0. 0.)
         (Vector2.create 0.5 0.5)
         (7, 5)

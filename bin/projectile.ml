@@ -3,17 +3,10 @@ open Engine.DefaultComponents
 open Raylib
 
 module C = struct
-  type s = { velocity : Vector2.t }
+  type s = unit
 
   include (val Component.create () : Component.Sig with type t = s)
 end
-
-let system =
-  System.create_q2
-    (query2 (module C) (module Position))
-    (fun id c pos ->
-      Position.set (Vector2.add pos @@ Vector2.scale c.velocity (get_frame_time ())) id)
-;;
 
 let cleanup_system =
   System.create2
@@ -25,7 +18,8 @@ let cleanup_system =
 let create pos velocity =
   Entity.create
     [ Position.create pos
-    ; C.create { velocity }
+    ; Velocity.create velocity
+    ; C.create ()
     ; ShapeRenderer.C.create (Circle (5., Color.white))
     ; Collision.Shape.create { shape = Circle 5.; mask = 1L }
     ; Damage.C.create { amount = 1. }

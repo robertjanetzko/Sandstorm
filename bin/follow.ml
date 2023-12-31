@@ -15,11 +15,10 @@ let would_collide id new_pos =
 
 let system =
   System.create_q
-    (query (module Position) >& (module C))
+    (query (module Position) >& (module C) >& (module Velocity))
     (fun id pos ->
       let direction = Vector2.subtract (Util.player_pos ()) pos |> Vector2.normalize in
-      let velocity = Vector2.scale direction (50. *. get_frame_time ()) in
-      let new_pos = Vector2.add pos velocity in
+      let velocity = Vector2.scale direction 50. in
       (* if not (would_collide id new_pos) then *)
-      Position.set new_pos id)
+      Velocity.set velocity id)
 ;;

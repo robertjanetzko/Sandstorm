@@ -12,7 +12,6 @@ module VampireWorld = struct
           ; Damage.impact_damage_system
           ; PlayerInput.system
           ; Shooter.system
-          ; Projectile.system
           ; Experience.Pickup.system
           ; Experience.level_up_system
           ; Health.system
@@ -22,6 +21,7 @@ module VampireWorld = struct
           ; Collision.cleanup_system
           ; MobSpawner.system
           ; Follow.system
+          ; velocity_system
           ; SpriteRenderer.animation_system
          |]
      ; FollowCamera.system
@@ -34,11 +34,12 @@ module VampireWorld = struct
   let init () =
     Entity.create
       [ Position.create @@ Vector2.create 40. 30.
+      ; Velocity.create @@ Vector2.zero ()
         (* ; ShapeRenderer.C.create @@ Circle (10., Color.red) *)
       ; SpriteRenderer.create_sprite_sheet
-          "resources/Warrior_Blue.png"
+          (Textures.player ())
           (Vector2.create 0. 0.)
-          (Vector2.create 0.5 0.5)
+          (Vector2.create (-0.5) 0.5)
           (6, 8)
       ; SpriteRenderer.create_animator 0 5 0.1
         (* ; ShapeRenderer.C.create @@ Circle (20., Color.green) *)
