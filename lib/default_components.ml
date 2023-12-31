@@ -23,7 +23,20 @@ module Position = struct
     | Some (id, pos, _) -> Some (id, pos)
     | _ -> None
   ;;
+
+  let quadtree = Quadtree.create 1000.
+
+  let refresh_quadtee () =
+    Quadtree.clear quadtree;
+    Seq.iter (fun id -> Quadtree.insert quadtree (get id) id) (all ())
+  ;;
 end
+
+let position_index_system = System.base (fun _state -> Position.refresh_quadtee ())
+
+let position_index_debug_system =
+  System.base (fun _state -> Quadtree.debug Position.quadtree)
+;;
 
 module Velocity = struct
   type s = Vector2.t

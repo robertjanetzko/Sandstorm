@@ -16,7 +16,7 @@ functor
       init_window 800 600 "raylib [core] example - mouse input";
       set_window_position 0 0;
       set_window_state [ ConfigFlags.Window_resizable ];
-      set_target_fps 60;
+      (* set_target_fps 60; *)
       W.init ()
     ;;
 

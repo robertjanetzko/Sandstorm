@@ -8,7 +8,8 @@ module VampireWorld = struct
   let systems =
     [| System.create_group
          ~condition:no_menu
-         [| Collision.system
+         [| position_index_system
+          ; Collision.system
           ; Damage.impact_damage_system
           ; PlayerInput.system
           ; Shooter.system
@@ -30,7 +31,10 @@ module VampireWorld = struct
     |]
   ;;
 
-  let render_systems = [| SpriteRenderer.system; ShapeRenderer.system |]
+  let render_systems =
+    [| SpriteRenderer.system; ShapeRenderer.system; position_index_debug_system |]
+  ;;
+
   let ui_systems = [| Experience.ui_system; Menu.menu_ui_system |]
 
   let init () =
@@ -54,7 +58,7 @@ module VampireWorld = struct
       ; Experience.Level.create 1
       ; Shooter.create 2.
       ];
-    MobSpawner.create ()
+    MobSpawner.create 1.
   ;;
 end
 

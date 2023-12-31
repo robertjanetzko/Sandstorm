@@ -40,7 +40,7 @@ let system =
   System.create (module C) (fun _id spawner -> if Timer.step spawner.timer then spawn ())
 ;;
 
-let create () = Entity.create [ C.create { timer = Timer.delay 1. } ]
+let create delay = Entity.create [ C.create { timer = Timer.delay delay } ]
 
 let spawn_experience_pickup pos =
   Entity.create

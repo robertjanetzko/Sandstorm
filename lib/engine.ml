@@ -9,6 +9,7 @@ module SpriteRenderer = Sprite_renderer
 module System = System
 module World = World
 module Timer = Timer
+module Quadtree = Quadtree
 
 let query = Query.query
 let query2 = Query.query2

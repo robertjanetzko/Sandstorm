@@ -119,6 +119,14 @@ let create2w
   (module Def : Sig)
 ;;
 
+let base (process : Game.state_t -> unit) =
+  let module Def = struct
+    let process = process
+  end
+  in
+  (module Def : Sig)
+;;
+
 let create_group ?(condition = fun _ -> true) systems =
   let module Def = struct
     let process state =
