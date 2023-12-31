@@ -22,6 +22,7 @@ module VampireWorld = struct
           ; MobSpawner.system
           ; Follow.system
           ; velocity_system
+          ; SpriteRenderer.flip_sprite_system
           ; Animations.system
           ; SpriteRenderer.animation_system
          |]
@@ -43,11 +44,7 @@ module VampireWorld = struct
           (Vector2.create 0.5 0.5)
           (6, 8)
       ; SpriteRenderer.create_animator 0 5 0.1
-      ; Animations.create_controller
-          [ "idle", (0, 5, false)
-          ; "walk_left", (6, 11, true)
-          ; "walk_right", (6, 11, false)
-          ]
+      ; Animations.create_controller [ "idle", (0, 5); "walk", (6, 11) ]
         (* ; ShapeRenderer.C.create @@ Circle (20., Color.green) *)
       ; Collision.Shape.create { shape = Circle 20.; mask = 2L }
       ; PlayerInput.C.create @@ ()

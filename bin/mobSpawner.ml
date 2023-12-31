@@ -28,11 +28,7 @@ let spawn () =
         (Vector2.create 0.5 0.5)
         (7, 5)
     ; SpriteRenderer.create_animator 7 12 0.1
-    ; Animations.create_controller
-        [ "idle", (0, 6, false)
-        ; "walk_left", (7, 12, true)
-        ; "walk_right", (7, 12, false)
-        ]
+    ; Animations.create_controller [ "idle", (0, 6); "walk", (7, 12) ]
     ; Follow.C.create ()
     ; MobTag.create ()
     ; Collision.Shape.create { shape = Circle 10.; mask = 1L }

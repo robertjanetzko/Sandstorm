@@ -26,10 +26,9 @@ let create_sprite_sheet texture anchor scale grid =
 type animation_t =
   { from_index : int
   ; to_index : int
-  ; mirrored : bool
   }
 
-module A = struct
+module Animator = struct
   type s =
     { mutable animation : animation_t
     ; timer : Timer.t
@@ -39,28 +38,19 @@ module A = struct
 end
 
 let create_animator from_index to_index duration =
-  A.create
-    { animation = { from_index; to_index; mirrored = false }
-    ; timer = Timer.start duration
-    }
+  Animator.create { animation = { from_index; to_index }; timer = Timer.start duration }
 ;;
 
 let system =
   System.create2
     (module Position)
     (module C)
-    (fun id pos { texture; anchor; scale; index; grid = cols, rows } ->
+    (fun _id pos { texture; anchor; scale; index; grid = cols, rows } ->
       let w = Texture.width texture / cols in
       let h = Texture.height texture / rows in
       let xi = index mod cols in
       let yi = index / cols in
       let sign x = if x < 0. then -1. else 1. in
-      let scale =
-        match A.get_opt id with
-        | Some { animation = { mirrored = true; _ }; _ } ->
-          Vector2.reflect (Vector2.create 0. 1.) scale
-        | _ -> scale
-      in
       let rect =
         Rectangle.create
           (float_of_int (w * xi))
@@ -78,7 +68,7 @@ let system =
 
 let animation_system =
   System.create2
-    (module A)
+    (module Animator)
     (module C)
     (fun _id a c ->
       if c.index < a.animation.from_index || c.index > a.animation.to_index
@@ -92,4 +82,20 @@ let animation_system =
         in
         c.index <- new_index))
 ;;
+
 (* draw_texture_v texture (Vector2.create x y) Color.white) *)
+
+module FlipSprite = struct
+  type s = unit
+
+  include (val Component.create () : Component.Sig with type t = s)
+end
+
+let flip_sprite_system =
+  System.create_q2
+    Query.(query2 (module C) (module Default_components.Velocity) >&& (module FlipSprite))
+    (fun _id c v ->
+      Vector2.(
+        if (x v < 0. && x c.scale > 0.) || (x v > 0. && x c.scale < 0.)
+        then c.scale <- create (x c.scale *. -1.) (y c.scale)))
+;;
