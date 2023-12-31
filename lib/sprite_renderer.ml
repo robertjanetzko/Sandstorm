@@ -31,14 +31,16 @@ type animation_t =
 module Animator = struct
   type s =
     { mutable animation : animation_t
+    ; end_action : int -> unit
     ; timer : Timer.t
     }
 
   include (val Component.create () : Component.Sig with type t = s)
 end
 
-let create_animator from_index to_index duration =
-  Animator.create { animation = { from_index; to_index }; timer = Timer.start duration }
+let create_animator ?(end_action = fun _ -> ()) ?(duration = 0.1) (from_index, to_index) =
+  Animator.create
+    { animation = { from_index; to_index }; timer = Timer.start duration; end_action }
 ;;
 
 let system =
@@ -70,7 +72,7 @@ let animation_system =
   System.create2
     (module Animator)
     (module C)
-    (fun _id a c ->
+    (fun id a c ->
       if c.index < a.animation.from_index || c.index > a.animation.to_index
       then c.index <- a.animation.from_index;
       if Timer.step a.timer
@@ -78,7 +80,9 @@ let animation_system =
         let new_index =
           if c.index + 1 <= a.animation.to_index
           then c.index + 1
-          else a.animation.from_index
+          else (
+            a.end_action id;
+            a.animation.from_index)
         in
         c.index <- new_index))
 ;;

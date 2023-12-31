@@ -39,11 +39,11 @@ module VampireWorld = struct
       ; Velocity.create @@ Vector2.zero ()
         (* ; ShapeRenderer.C.create @@ Circle (10., Color.red) *)
       ; SpriteRenderer.create_sprite_sheet
-          (Textures.player ())
+          (Textures.get "resources/Warrior_Blue.png")
           (Vector2.create 0. 0.)
           (Vector2.create 0.5 0.5)
           (6, 8)
-      ; SpriteRenderer.create_animator 0 5 0.1
+      ; SpriteRenderer.create_animator (0, 5)
       ; Animations.create_controller [ "idle", (0, 5); "walk", (6, 11) ]
         (* ; ShapeRenderer.C.create @@ Circle (20., Color.green) *)
       ; Collision.Shape.create { shape = Circle 20.; mask = 2L }
@@ -53,15 +53,6 @@ module VampireWorld = struct
       ; Experience.C.create (ref 0)
       ; Experience.Level.create 1
       ; Shooter.create 2.
-      ];
-    (* Entity.create
-       [ Position.create @@ Vector2.create 140. 130.
-      ; ShapeRenderer.C.create @@ Circle (20., Color.green)
-      ; Collision.Shape.create (Circle 20.)
-      ]; *)
-    Entity.create
-      [ Position.create @@ Vector2.create 10. 130.
-      ; ShapeRenderer.C.create @@ Rect (100., 120., Color.green)
       ];
     MobSpawner.create ()
   ;;

@@ -1,23 +1,12 @@
 open Raylib
 
-let player_texture = ref None
+let textures = Hashtbl.create 100
 
-let player () =
-  match !player_texture with
+let get name =
+  match Hashtbl.find_opt textures name with
   | Some t -> t
-  | None ->
-    let t = load_texture "resources/Warrior_Blue.png" in
-    player_texture := Some t;
-    t
-;;
-
-let mob_texture = ref None
-
-let mob () =
-  match !mob_texture with
-  | Some t -> t
-  | None ->
-    let t = load_texture "resources/Torch_Red.png" in
-    mob_texture := Some t;
+  | _ ->
+    let t = load_texture name in
+    Hashtbl.add textures name t;
     t
 ;;
