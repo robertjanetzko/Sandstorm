@@ -56,5 +56,5 @@ let level_up_system =
       if !amount >= 1000 * level
       then (
         Level.set (level + 1) id;
-        Menu.show ()))
+        Menu.showLevelUp ()))
 ;;

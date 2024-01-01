@@ -5,8 +5,8 @@ let player_pos () =
   | Some (player_id, _) ->
     (match Position.get_opt player_id with
      | Some player_pos -> player_pos
-     | None -> raise Not_found)
-  | None -> raise Not_found
+     | None -> Raylib.Vector2.zero ())
+  | None -> Raylib.Vector2.zero ()
 ;;
 
 let collision_layer_player = 1 lsl 1
