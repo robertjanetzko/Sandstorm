@@ -11,6 +11,7 @@ module VampireWorld = struct
          [| (* position_index_system *)
             Collision.system
           ; Damage.impact_damage_system
+          ; Damage.mob_damage_system
           ; PlayerInput.system
           ; Shooter.system
           ; Experience.Pickup.system
@@ -35,7 +36,7 @@ module VampireWorld = struct
     [| SpriteRenderer.system; ShapeRenderer.system (*; position_index_debug_system*) |]
   ;;
 
-  let ui_systems = [| Experience.ui_system; Menu.menu_ui_system |]
+  let ui_systems = [| Health.ui_system; Experience.ui_system; Menu.menu_ui_system |]
 
   let init () =
     Entity.create
@@ -50,7 +51,12 @@ module VampireWorld = struct
       ; SpriteRenderer.create_animator (0, 5)
       ; Animations.create_controller [ "idle", (0, 5); "walk", (6, 11) ]
         (* ; ShapeRenderer.C.create @@ Circle (20., Color.green) *)
-      ; Collision.Shape.create { shape = Circle 20.; mask = 2L }
+      ; Collision.Shape.create
+          { shape = Circle 20.
+          ; mask =
+              Util.collision_mask
+                [ Util.collision_layer_player; Util.collision_layer_experience ]
+          }
       ; PlayerInput.C.create @@ ()
       ; FollowCamera.C.create ()
       ; Health.C.create { current = 100.; max = 100. }

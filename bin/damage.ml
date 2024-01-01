@@ -15,3 +15,10 @@ let impact_damage_system =
       | Some health -> health.current <- health.current -. damage.amount
       | _ -> ())
 ;;
+
+let mob_damage_system =
+  System.create_q2
+    (query2 (module Health.C) (module Collision.Impact) >&& (module PlayerInput.C))
+    (fun _id health impact ->
+      if MobSpawner.MobTag.is impact.other then health.current <- health.current -. 0.1)
+;;

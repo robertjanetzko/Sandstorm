@@ -8,7 +8,7 @@ type collisionShape =
 module Shape = struct
   type s =
     { shape : collisionShape
-    ; mask : int64
+    ; mask : int
     }
 
   include (val Component.create () : Component.Sig with type t = s)
@@ -67,7 +67,7 @@ module Impact = struct
   include (val Component.create () : Component.Sig with type t = s)
 end
 
-let match_mask m1 m2 = Int64.logand m1 m2 > 0L
+let match_mask m1 m2 = m1 land m2 > 0
 
 let overlap ?(new_p1 = None) id1 id2 =
   if id1 == id2
