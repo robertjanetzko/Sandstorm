@@ -12,6 +12,50 @@ module Shape = struct
     }
 
   include (val Component.create () : Component.Sig with type t = s)
+
+  let sorted_list = ref []
+
+  let min_x id =
+    let x =
+      match Position.get_opt id with
+      | Some v -> Vector2.x v
+      | None -> 0.
+    in
+    match get_opt id with
+    | Some s ->
+      (match s.shape with
+       | Circle r -> x -. r
+       | Rect _ -> x)
+    | None -> x
+  ;;
+
+  let max_x id =
+    let x =
+      match Position.get_opt id with
+      | Some v -> Vector2.x v
+      | None -> 0.
+    in
+    match get_opt id with
+    | Some s ->
+      (match s.shape with
+       | Circle r -> x +. r
+       | Rect (w, _) -> x +. w)
+    | None -> x
+  ;;
+
+  let cmp_min_x id1 id2 = min_x id1 > min_x id2
+
+  let create c id =
+    create c id;
+    sorted_list := Util.insert cmp_min_x id !sorted_list
+  ;;
+
+  let remove id =
+    sorted_list := List.filter (fun x -> x != id) !sorted_list;
+    remove id
+  ;;
+
+  let sort_axis () = sorted_list := Util.insertion_sort cmp_min_x !sorted_list
 end
 
 module Impact = struct
@@ -50,18 +94,36 @@ let detect id1 id2 =
   then Impact.set { other = id2; position = Position.get id1 } id1
 ;;
 
+(* let system =
+   System.create2
+   (module Shape)
+   (module Position)
+   (fun id _s1 p1 ->
+   let s =
+   Quadtree.query ~center:p1 ~radius:30. Position.quadtree
+   |> List.to_seq
+   |> Seq.filter Shape.is
+   in
+   (* let s = Component.(query (module Shape) >? (module Position)) in *)
+   Seq.iter (detect id) s)
+   ;; *)
+
+module IdSet = Set.Make (Int)
+
 let system =
-  System.create2
-    (module Shape)
-    (module Position)
-    (fun id _s1 p1 ->
-      let s =
-        Quadtree.query ~center:p1 ~radius:30. Position.quadtree
-        |> List.to_seq
-        |> Seq.filter Shape.is
-      in
-      (* let s = Component.(query (module Shape) >? (module Position)) in *)
-      Seq.iter (detect id) s)
+  System.base (fun _state ->
+    Shape.sort_axis ();
+    let active = ref IdSet.empty in
+    !Shape.sorted_list
+    |> List.to_seq
+    |> Seq.filter Shape.is
+    |> Seq.iter (fun id1 ->
+      !active
+      |> IdSet.iter (fun id2 ->
+        if Shape.min_x id1 > Shape.max_x id2
+        then active := IdSet.remove id2 !active
+        else detect id1 id2);
+      active := IdSet.add id1 !active))
 ;;
 
 let cleanup_system = System.create (module Impact) (fun id _impact -> Impact.remove id)
