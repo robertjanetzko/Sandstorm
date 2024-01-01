@@ -10,6 +10,7 @@ module System = System
 module World = World
 module Timer = Timer
 module Quadtree = Quadtree
+module Qq = Qq
 
 let query = Query.query
 let query2 = Query.query2
