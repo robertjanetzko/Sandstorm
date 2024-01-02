@@ -28,6 +28,7 @@ let spawn () =
         (Vector2.create 0.5 0.5)
         (7, 5)
     ; SpriteRenderer.create_animator (7, 12)
+    ; SpriteRenderer.FlipSprite.create ()
     ; Animations.create_controller [ "idle", (0, 6); "walk", (7, 12) ]
     ; Follow.C.create ()
     ; MobTag.create ()

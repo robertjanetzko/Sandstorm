@@ -13,6 +13,7 @@ let create () =
         (Vector2.create 0.5 0.5)
         (6, 8)
     ; SpriteRenderer.create_animator (0, 5)
+    ; SpriteRenderer.FlipSprite.create ()
     ; Animations.create_controller [ "idle", (0, 5); "walk", (6, 11) ]
       (* ; ShapeRenderer.C.create @@ Circle (20., Color.green) *)
     ; Collision.Shape.create
