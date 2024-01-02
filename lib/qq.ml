@@ -16,7 +16,8 @@ exception EmptyQuery
 let eval id q f = evaluate_query id f q
 let query m = And (m, Query)
 let query_with m q = And (m, q)
-let ( >& ) a b = query_with b a
+let ( ^& ) a b = query_with a b
+let ( ^? ) a b = query_with a (query b)
 
 let for_each : type a. a query -> (int -> a) -> unit =
   fun query f ->

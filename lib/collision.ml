@@ -126,4 +126,6 @@ let system =
       active := IdSet.add id1 !active))
 ;;
 
-let cleanup_system = System.create (module Impact) (fun id _impact -> Impact.remove id)
+let cleanup_system =
+  System.for_each (Qq.query (module Impact)) (fun id _impact -> Impact.remove id)
+;;

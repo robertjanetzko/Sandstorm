@@ -20,8 +20,8 @@ module Pickup = struct
   end
 
   let system =
-    System.create_q2
-      (query2 (module C) (module Collision.Impact))
+    System.for_each
+      ((module C) ^? (module Collision.Impact))
       (fun id amount impact ->
         pickup amount impact.other;
         destroy_entity id)
@@ -29,9 +29,9 @@ module Pickup = struct
 end
 
 let ui_system =
-  System.create_q
-    (query (module C) >& (module PlayerInput.C))
-    (fun _id amount ->
+  System.for_each
+    ((module C) ^? (module PlayerInput.C))
+    (fun _id amount _input ->
       let open Raylib in
       let w = get_render_width () in
       let h = get_render_height () in
@@ -50,9 +50,9 @@ module Level = struct
 end
 
 let level_up_system =
-  System.create_q2
-    (query2 (module C) (module Level) >&& (module PlayerInput.C))
-    (fun id amount level ->
+  System.for_each
+    ((module C) ^& (module Level) ^? (module PlayerInput.C))
+    (fun id amount level _input ->
       if !amount >= 1000 * level
       then (
         Level.set (level + 1) id;

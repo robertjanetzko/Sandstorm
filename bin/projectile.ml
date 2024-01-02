@@ -9,9 +9,8 @@ module C = struct
 end
 
 let cleanup_system =
-  System.create2
-    (module Collision.Impact)
-    (module C)
+  System.for_each
+    ((module Collision.Impact) ^? (module C))
     (fun id _impact _c -> destroy_entity id)
 ;;
 

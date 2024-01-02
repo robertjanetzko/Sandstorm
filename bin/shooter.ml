@@ -21,8 +21,7 @@ let fire pos =
 ;;
 
 let system =
-  System.create2
-    (module C)
-    (module Position)
+  System.for_each
+    ((module C) ^? (module Position))
     (fun _id c pos -> if Timer.step c.timer then fire pos)
 ;;

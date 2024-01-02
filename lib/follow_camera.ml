@@ -8,8 +8,7 @@ module C = struct
 end
 
 let system =
-  System.create2w
-    (module Position)
-    (module C)
+  System.for_each_state
+    Qq.((module Position) ^? (module C))
     (fun state _id pos _cam -> Camera2D.set_target state.camera pos)
 ;;

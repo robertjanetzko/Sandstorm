@@ -26,8 +26,8 @@ let create_controller (animation_list : (string * (int * int)) list) =
 ;;
 
 let system =
-  System.create_q2
-    (query2 (module AnimationController) (module SpriteRenderer.Animator))
+  System.for_each
+    ((module AnimationController) ^? (module SpriteRenderer.Animator))
     (fun id ctrl anim ->
       let next_anim =
         match Velocity.get_opt id with

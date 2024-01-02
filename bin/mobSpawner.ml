@@ -42,7 +42,9 @@ let spawn () =
 ;;
 
 let system =
-  System.create (module C) (fun _id spawner -> if Timer.step spawner.timer then spawn ())
+  System.for_each
+    (query (module C))
+    (fun _id spawner -> if Timer.step spawner.timer then spawn ())
 ;;
 
 let create delay = Entity.create [ C.create { timer = Timer.delay delay } ]
@@ -77,9 +79,9 @@ let spawn_death_effect pos =
 ;;
 
 let mob_killed_system =
-  System.create_q
-    (query (module Position) >& (module Health.Dead) >& (module MobTag))
-    (fun _id pos ->
+  System.for_each
+    ((module Position) ^& (module Health.Dead) ^? (module MobTag))
+    (fun _id pos _dead _mob ->
       spawn_experience_pickup pos;
       spawn_death_effect pos)
 ;;

@@ -31,9 +31,9 @@ let create () =
 ;;
 
 let player_died_system =
-  System.create_q
-    (query (module PlayerInput.C) >& (module Health.Dead))
-    (fun _id _input ->
+  System.for_each
+    ((module PlayerInput.C) ^? (module Health.Dead))
+    (fun _id _input _dead ->
       print_endline "DEAD";
       Menu.showGameOver ())
 ;;

@@ -16,15 +16,19 @@ module Dead = struct
 end
 
 let system =
-  System.create (module C) (fun id health -> if health.current <= 0. then Dead.set () id)
+  System.for_each
+    (query (module C))
+    (fun id health -> if health.current <= 0. then Dead.set () id)
 ;;
 
-let death_system = System.create (module Dead) (fun id _dead -> destroy_entity id)
+let death_system =
+  System.for_each (query (module Dead)) (fun id _dead -> destroy_entity id)
+;;
 
 let ui_system =
-  System.create_q
-    (query (module C) >& (module PlayerInput.C))
-    (fun _id health ->
+  System.for_each
+    ((module C) ^? (module PlayerInput.C))
+    (fun _id health _input ->
       let open Raylib in
       let w = get_render_width () in
       let h = get_render_height () in

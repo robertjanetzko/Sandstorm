@@ -1,7 +1,7 @@
 open Engine
 
 let level_up_ui_system =
-  System.create_q
+  System.for_each
     (query (module Menu.LevelUp))
     (fun id _menu ->
       let open Raylib in
@@ -11,7 +11,7 @@ let level_up_ui_system =
 ;;
 
 let game_over_ui_system =
-  System.create_q
+  System.for_each
     (query (module Menu.GameOver))
     (fun id _menu ->
       let open Raylib in

@@ -16,9 +16,9 @@ let input_direction () =
 ;;
 
 let system =
-  Engine.System.create_q
-    (query (module C) >& (module Velocity))
-    (fun id _input ->
+  Engine.System.for_each
+    ((module C) ^? (module Velocity))
+    (fun id _input _vel ->
       let dir = input_direction () in
       let vel = Vector2.scale dir 150. in
       Velocity.set vel id)

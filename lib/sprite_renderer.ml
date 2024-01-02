@@ -44,9 +44,8 @@ let create_animator ?(end_action = fun _ -> ()) ?(duration = 0.1) (from_index, t
 ;;
 
 let system =
-  System.create2
-    (module Position)
-    (module C)
+  System.for_each
+    Qq.((module Position) ^? (module C))
     (fun _id pos { texture; anchor; scale; index; grid = cols, rows } ->
       let w = Texture.width texture / cols in
       let h = Texture.height texture / rows in
@@ -69,9 +68,8 @@ let system =
 ;;
 
 let animation_system =
-  System.create2
-    (module Animator)
-    (module C)
+  System.for_each
+    Qq.((module Animator) ^? (module C))
     (fun id a c ->
       if c.index < a.animation.from_index || c.index > a.animation.to_index
       then c.index <- a.animation.from_index;
@@ -96,9 +94,9 @@ module FlipSprite = struct
 end
 
 let flip_sprite_system =
-  System.create_q2
-    Query.(query2 (module C) (module Default_components.Velocity) >&& (module FlipSprite))
-    (fun _id c v ->
+  System.for_each
+    Qq.((module C) ^& (module Default_components.Velocity) ^? (module FlipSprite))
+    (fun _id c v _flip ->
       Vector2.(
         if (x v < 0. && x c.scale > 0.) || (x v > 0. && x c.scale < 0.)
         then c.scale <- create (x c.scale *. -1.) (y c.scale)))
