@@ -1,5 +1,5 @@
-open Engine
-open Engine.DefaultComponents
+open Sandstorm
+open Sandstorm.DefaultComponents
 open Raylib
 
 let create () =

@@ -1,5 +1,5 @@
-open Engine
-open Engine.DefaultComponents
+open Sandstorm
+open Sandstorm.DefaultComponents
 
 module VampireWorld = struct
   let no_menu _state = Option.is_none @@ Menu.C.first ()

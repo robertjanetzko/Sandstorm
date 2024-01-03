@@ -1,5 +1,0 @@
-(executable
- (public_name game)
- (name main)
- (modes byte exe)
- (libraries engine))

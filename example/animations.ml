@@ -1,5 +1,5 @@
-open Engine
-open DefaultComponents
+open Sandstorm
+open Sandstorm.DefaultComponents
 open Raylib
 
 module AnimationController = struct

@@ -1,26 +1,21 @@
 (lang dune 3.12)
 
-(name game)
+(name sandstorm)
 
 (generate_opam_files true)
 
 (source
- (github username/reponame))
+ (github robertjanetzko/Sandstorm))
 
-(authors "Author Name")
+(license zlib)
 
-(maintainers "Maintainer Name")
+(authors "Robert Janetzko")
 
-(license LICENSE)
-
-(documentation https://url/to/documentation)
+(maintainers "robertjanetzko")
 
 (package
- (name game)
- (synopsis "A short synopsis")
- (description "A longer description")
- (depends ocaml dune)
- (tags
-  (topics "to describe" your project)))
-
-; See the complete stanza docs at https://dune.readthedocs.io/en/stable/dune-files.html#dune-project
+ (name sandstorm)
+ (synopsis "Ocaml game engine")
+ (description
+  "a prototype game engine written in OCaml using ECS and raylib")
+ (depends ocaml dune raylib raygui))

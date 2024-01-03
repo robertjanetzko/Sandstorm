@@ -1,5 +1,5 @@
-open Engine
-open Engine.DefaultComponents
+open Sandstorm
+open Sandstorm.DefaultComponents
 open Raylib
 
 module C = struct
@@ -16,7 +16,7 @@ let input_direction () =
 ;;
 
 let system =
-  Engine.System.for_each
+  System.for_each
     ((module C) ^? (module Velocity))
     (fun id _input _vel ->
       let dir = input_direction () in
