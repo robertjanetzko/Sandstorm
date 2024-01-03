@@ -1,7 +1,8 @@
 open Sandstorm.DefaultComponents
+open Components
 
 let player_pos () =
-  match PlayerInput.C.first () with
+  match Player.Tag.first () with
   | Some (player_id, _) ->
     (match Position.get_opt player_id with
      | Some player_pos -> player_pos

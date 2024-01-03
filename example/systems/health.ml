@@ -1,23 +1,10 @@
 open Sandstorm
-
-module C = struct
-  type s =
-    { mutable current : float
-    ; mutable max : float
-    }
-
-  include (val Component.create () : Component.Sig with type t = s)
-end
-
-module Dead = struct
-  type s = unit
-
-  include (val Component.create () : Component.Sig with type t = s)
-end
+open Components
+open Components.Health
 
 let system =
   System.for_each
-    (query (module C))
+    (query (module Health))
     (fun id health -> if health.current <= 0. then Dead.set () id)
 ;;
 
@@ -27,7 +14,7 @@ let death_system =
 
 let ui_system =
   System.for_each
-    ((module C) ^? (module PlayerInput.C))
+    ((module Health) ^? (module Player.Tag))
     (fun _id health _input ->
       let open Raylib in
       let w = get_render_width () in

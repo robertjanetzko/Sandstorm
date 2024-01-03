@@ -1,12 +1,7 @@
 open Sandstorm
 open Sandstorm.DefaultComponents
+open Components
 open Raylib
-
-module C = struct
-  type s = unit
-
-  include (val Component.create () : Component.Sig with type t = s)
-end
 
 let would_collide id new_pos =
   let s = Component.(query (module Collision.Shape) >? (module Position)) in
@@ -15,9 +10,11 @@ let would_collide id new_pos =
 
 let system =
   System.for_each
-    ((module Position) ^& (module C) ^? (module Velocity))
+    ((module Position) ^& (module Mob.Tag) ^? (module Velocity))
     (fun id pos _c _v ->
-      let direction = Vector2.subtract (Util.player_pos ()) pos |> Vector2.normalize in
+      let direction =
+        Vector2.subtract (Util.Utils.player_pos ()) pos |> Vector2.normalize
+      in
       let velocity = Vector2.scale direction 50. in
       (* if not (would_collide id new_pos) then *)
       Velocity.set velocity id)

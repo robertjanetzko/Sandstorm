@@ -1,8 +1,9 @@
 open Sandstorm
 open Sandstorm.DefaultComponents
+open Systems
 
 module VampireWorld = struct
-  let no_menu _state = Option.is_none @@ Menu.C.first ()
+  let no_menu _state = Option.is_none @@ Components.Ui.Menu.first ()
   (* let player_alive _state = Option.is_some @@ PlayerInput.C.first () *)
   (* let run_game state = player_alive state && no_menu state *)
 
@@ -13,21 +14,21 @@ module VampireWorld = struct
             Collision.system
           ; Damage.impact_damage_system
           ; Damage.mob_damage_system
-          ; PlayerInput.system
+          ; Player.system
           ; Shooter.system
-          ; Experience.Pickup.system
+          ; Experience.pickup_system
           ; Experience.level_up_system
           ; Health.system
-          ; MobSpawner.mob_killed_system
+          ; MobKilled.mob_killed_system
           ; Player.player_died_system
           ; Health.death_system
           ; Projectile.cleanup_system
           ; Collision.cleanup_system
-          ; MobSpawner.system
-          ; Follow.system
+          ; Spawner.system
+          ; MobFollow.system
           ; velocity_system
           ; SpriteRenderer.flip_sprite_system
-          ; Animations.system
+          ; Animation.system
           ; SpriteRenderer.animation_system
          |]
      ; FollowCamera.system
@@ -41,14 +42,14 @@ module VampireWorld = struct
   let ui_systems =
     [| Health.ui_system
      ; Experience.ui_system
-     ; Ui.level_up_ui_system
-     ; Ui.game_over_ui_system
+     ; Systems.Ui.level_up_ui_system
+     ; Systems.Ui.game_over_ui_system
     |]
   ;;
 
   let init () =
-    Player.create ();
-    MobSpawner.create 0.3
+    Util.GameUtil.create_player ();
+    Spawner.create 0.3
   ;;
 end
 

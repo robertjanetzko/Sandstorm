@@ -1,12 +1,9 @@
 open Sandstorm
 open Sandstorm.DefaultComponents
 open Raylib
-
-module C = struct
-  type s = unit
-
-  include (val Component.create () : Component.Sig with type t = s)
-end
+open Components
+open Components.Health
+open Util
 
 let input_direction () =
   let open Raylib in
@@ -17,9 +14,15 @@ let input_direction () =
 
 let system =
   System.for_each
-    ((module C) ^? (module Velocity))
+    ((module Player.Tag) ^? (module Velocity))
     (fun id _input _vel ->
       let dir = input_direction () in
       let vel = Vector2.scale dir 150. in
       Velocity.set vel id)
+;;
+
+let player_died_system =
+  System.for_each
+    ((module Player.Tag) ^? (module Dead))
+    (fun _id _input _dead -> UiHelper.showGameOver ())
 ;;
