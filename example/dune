@@ -3,4 +3,4 @@
  (name main)
  (modes byte exe)
  (package sandstorm_raylib)
- (libraries sandstorm_raylib types components systems))
+ (libraries sandstorm.raylib types components systems))

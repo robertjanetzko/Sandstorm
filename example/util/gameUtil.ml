@@ -1,6 +1,5 @@
 open Sandstorm
 open Sandstorm_raylib
-open Sandstorm_raylib_types
 open Sandstorm_raylib_components
 open Components
 open Components.Health

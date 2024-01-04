@@ -1,4 +1,4 @@
 (library
  (name sandstorm_raylib_types)
- (public_name sandstorm_raylib.types)
+ (public_name sandstorm.raylib.types)
  (libraries raylib))

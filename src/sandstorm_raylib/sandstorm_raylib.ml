@@ -1,7 +1,7 @@
 module World = World
+include Sandstorm_raylib_types
 open Sandstorm
 open Sandstorm_raylib_components
-open Sandstorm_raylib_types
 
 let create_sprite texture anchor scale =
   Sprite.create { texture; anchor; scale; index = 0; grid = 1, 1 }

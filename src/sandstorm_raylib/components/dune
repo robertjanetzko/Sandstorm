@@ -1,4 +1,4 @@
 (library
  (name sandstorm_raylib_components)
- (public_name sandstorm_raylib.components)
- (libraries sandstorm sandstorm_raylib_types raylib))
+ (public_name sandstorm.raylib.components)
+ (libraries sandstorm sandstorm.raylib.types raylib))
