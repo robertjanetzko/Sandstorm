@@ -1,6 +1,6 @@
 module Component = Component
 module Entity = Entity
-module BaseSystem = System
+module System = System
 module World = World
 module ListUtil = Util
 

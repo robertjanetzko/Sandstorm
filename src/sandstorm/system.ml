@@ -1,61 +1,43 @@
-module type GAMESTATE = sig
-  type t
+module type Sig = sig
+  val process : unit -> unit
 end
 
-module Make (G : GAMESTATE) = struct
-  module type Sig = sig
-    type state_t
+(* let has_all (cmps : (module Component.Sig) list) id =
+   List.fold_left (fun a (module C : Component.Sig) -> a && C.is id) true cmps
+   ;; *)
 
-    val process : G.t -> unit
+let for_each query process =
+  let module Def = struct
+    let process _state = Query.for_each query process
   end
+  in
+  (module Def : Sig)
+;;
 
-  let has_all (cmps : (module Component.Sig) list) id =
-    List.fold_left (fun a (module C : Component.Sig) -> a && C.is id) true cmps
-  ;;
+(* let for_each_state query process =
+   let module Def = struct
+   type state_t = G.t
 
-  let for_each query process =
-    let module Def = struct
-      type state_t = G.t
+   let process state = Query.for_each query (process state)
+   end
+   in
+   (module Def : Sig)
+   ;; *)
 
-      let process _state = Query.for_each query process
-    end
-    in
-    (module Def : Sig with type state_t = G.t)
-  ;;
+let base (process : unit -> unit) =
+  let module Def = struct
+    let process = process
+  end
+  in
+  (module Def : Sig)
+;;
 
-  let for_each_state query process =
-    let module Def = struct
-      type state_t = G.t
-
-      let process state = Query.for_each query (process state)
-    end
-    in
-    (module Def : Sig with type state_t = G.t)
-  ;;
-
-  let base (process : G.t -> unit) =
-    let module Def = struct
-      type state_t = G.t
-
-      let process = process
-    end
-    in
-    (module Def : Sig with type state_t = G.t)
-  ;;
-
-  let create_group ?(condition = fun _ -> true) systems =
-    let module Def = struct
-      type state_t = G.t
-
-      let process state =
-        if condition state
-        then
-          Array.iter
-            (fun (module S : Sig with type state_t = G.t) -> S.process state)
-            systems
-      ;;
-    end
-    in
-    (module Def : Sig with type state_t = G.t)
-  ;;
-end
+let create_group ?(condition = fun _ -> true) systems =
+  let module Def = struct
+    let process () =
+      if condition () then Array.iter (fun (module S : Sig) -> S.process ()) systems
+    ;;
+  end
+  in
+  (module Def : Sig)
+;;

@@ -1,24 +1,28 @@
 open Sandstorm
 
-module GameState = struct
-  type t = float ref
+module Counter = struct
+  type s = float ref
+
+  include (val Component.create () : Component.Sig with type t = s)
 end
 
-module S = BaseSystem.Make (GameState)
-
 let simple =
-  S.base (fun state ->
-    state := !state +. 1.;
-    print_endline @@ string_of_float !state)
+  System.for_each
+    (query (module Counter))
+    (fun _id counter ->
+      counter := !counter +. 1.;
+      print_endline @@ string_of_float !counter)
 ;;
 
 module SimpleWorld = struct
-  type state_t = GameState.t
-
   let systems = [| simple |]
-  let init () = ()
-  let init_state () = ref 1.
-  let should_stop state = !state > 100.
+  let setup () = Entity.create [ Counter.create @@ ref 0. ]
+
+  let should_stop () =
+    match Counter.first () with
+    | Some (_, counter) -> !counter >= 10.
+    | _ -> false
+  ;;
 end
 
 module Game = World.Make (SimpleWorld)

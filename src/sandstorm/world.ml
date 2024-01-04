@@ -1,16 +1,7 @@
-module type SYSTEM = sig
-  type state_t
-
-  val process : state_t -> unit
-end
-
 module type WORLD = sig
-  type state_t
-
-  val systems : (module SYSTEM with type state_t = state_t) array
-  val init : unit -> unit
-  val init_state : unit -> state_t
-  val should_stop : state_t -> bool
+  val systems : (module System.Sig) array
+  val setup : unit -> unit
+  val should_stop : unit -> bool
 end
 
 module Make =
@@ -18,17 +9,14 @@ functor
   (W : WORLD)
   ->
   struct
-    let setup () = W.init ()
-    let state = W.init_state ()
+    let setup () = W.setup ()
 
     let process_systems systems =
-      Array.iter
-        (fun (module S : SYSTEM with type state_t = W.state_t) -> S.process state)
-        systems
+      Array.iter (fun (module S : System.Sig) -> S.process ()) systems
     ;;
 
     let rec loop () =
-      match W.should_stop state with
+      match W.should_stop () with
       | true -> ()
       | false ->
         process_systems W.systems;

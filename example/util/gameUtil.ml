@@ -26,7 +26,7 @@ let create_player () =
               [ Utils.collision_layer_player; Utils.collision_layer_experience ]
         }
     ; Player.Tag.create @@ ()
-    ; FollowCamera.C.create ()
+    ; FollowCamera.create ()
     ; Health.create { current = 100.; max = 100. }
     ; Experience.create (ref 0)
     ; Level.create 1
