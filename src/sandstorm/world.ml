@@ -10,6 +10,7 @@ module type WORLD = sig
   val systems : (module SYSTEM with type state_t = state_t) array
   val init : unit -> unit
   val init_state : unit -> state_t
+  val should_stop : state_t -> bool
 end
 
 module Make =
@@ -27,8 +28,11 @@ functor
     ;;
 
     let rec loop () =
-      process_systems W.systems;
-      loop ()
+      match W.should_stop state with
+      | true -> ()
+      | false ->
+        process_systems W.systems;
+        loop ()
     ;;
 
     let run () =

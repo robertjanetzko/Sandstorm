@@ -2,6 +2,8 @@ open Sandstorm_raylib
 open Systems
 
 module VampireWorld = struct
+  type state_t = Game.t
+
   let no_menu _state = Option.is_none @@ Components.Ui.Menu.first ()
   (* let player_alive _state = Option.is_some @@ PlayerInput.C.first () *)
   (* let run_game state = player_alive state && no_menu state *)
@@ -52,6 +54,6 @@ module VampireWorld = struct
   ;;
 end
 
-module Game = World.RMake (VampireWorld)
+module Game = World.Make (VampireWorld)
 
 let () = Game.run ()
