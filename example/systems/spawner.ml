@@ -43,4 +43,6 @@ let system =
     (fun _id spawner -> if Timer.step spawner.timer then spawn_mob ())
 ;;
 
-let create delay = Entity.create [ Spawner.create { timer = Timer.delay delay } ]
+let create_mob_spawner delay =
+  Entity.create [ Spawner.create { timer = Timer.delay delay } ]
+;;

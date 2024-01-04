@@ -4,27 +4,17 @@ module type WORLD = sig
   val should_stop : unit -> bool
 end
 
-module Make =
-functor
-  (W : WORLD)
-  ->
-  struct
-    let setup () = W.setup ()
-
-    let process_systems systems =
-      Array.iter (fun (module S : System.Sig) -> S.process ()) systems
-    ;;
-
-    let rec loop () =
-      match W.should_stop () with
-      | true -> ()
-      | false ->
-        process_systems W.systems;
-        loop ()
-    ;;
-
-    let run () =
-      setup ();
+module Make (W : WORLD) = struct
+  let rec loop () =
+    match W.should_stop () with
+    | true -> ()
+    | false ->
+      Array.iter (fun (module S : System.Sig) -> S.process ()) W.systems;
       loop ()
-    ;;
-  end
+  ;;
+
+  let run () =
+    W.setup ();
+    loop ()
+  ;;
+end

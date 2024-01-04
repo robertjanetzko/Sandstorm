@@ -49,7 +49,7 @@ module VampireWorld = struct
 
   let setup () =
     Util.GameUtil.create_player ();
-    Spawner.create 0.3
+    Spawner.create_mob_spawner 0.3
   ;;
 end
 
