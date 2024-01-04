@@ -1,19 +1,20 @@
 open Raylib
 open Sandstorm
 open Sandstorm_raylib
+open Sandstorm_raylib_components
 open Components
 open Util
 
 let spawn_experience_pickup pos =
   Entity.create
     [ Position.create pos
-    ; SpriteRenderer.create_sprite_sheet
+    ; create_sprite_sheet
         (Textures.get "resources/Coin.png")
         (Vector2.zero ())
         (Vector2.create 1. 1.)
         (4, 1)
-    ; SpriteRenderer.create_animator ~duration:0.2 (0, 3)
-    ; Collision.Shape.create
+    ; create_animator ~duration:0.2 (0, 3)
+    ; Collision_shape.create
         { shape = Circle 3.
         ; mask = Utils.collision_mask [ Utils.collision_layer_experience ]
         }
@@ -24,12 +25,12 @@ let spawn_experience_pickup pos =
 let spawn_death_effect pos =
   Entity.create
     [ Position.create pos
-    ; SpriteRenderer.create_sprite_sheet
+    ; create_sprite_sheet
         (Textures.get "resources/Dead.png")
         (Vector2.zero ())
         (Vector2.create 0.5 0.5)
         (7, 2)
-    ; SpriteRenderer.create_animator ~end_action:destroy_entity (0, 13)
+    ; create_animator ~end_action:destroy_entity (0, 13)
     ]
 ;;
 

@@ -1,4 +1,4 @@
-open Sandstorm_raylib
+open Sandstorm_raylib_components
 open Components
 
 let player_pos () =

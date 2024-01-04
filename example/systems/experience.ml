@@ -1,5 +1,5 @@
 open Sandstorm
-open Sandstorm_raylib
+open Sandstorm_raylib_components
 open Components
 open Components.Experience
 open Util
@@ -12,7 +12,7 @@ let pickup amount entity =
 
 let pickup_system =
   System.for_each
-    ((module Pickup) ^? (module Collision.Impact))
+    ((module Pickup) ^? (module Collision_impact))
     (fun id amount impact ->
       pickup amount impact.other;
       destroy_entity id)

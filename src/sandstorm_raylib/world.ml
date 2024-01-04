@@ -1,4 +1,5 @@
 open Sandstorm
+open Sandstorm_raylib_components
 open Raylib
 
 module type WORLD = sig
@@ -25,7 +26,7 @@ functor
 
       let update_camera () =
         query_each
-          ((module Default_components.Position) ^? (module Follow_camera))
+          ((module Position) ^? (module Follow_camera))
           (fun _id pos _cam -> Camera2D.set_target camera pos)
       ;;
 

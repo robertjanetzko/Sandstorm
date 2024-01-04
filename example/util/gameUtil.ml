@@ -1,5 +1,7 @@
 open Sandstorm
 open Sandstorm_raylib
+open Sandstorm_raylib_types
+open Sandstorm_raylib_components
 open Components
 open Components.Health
 open Components.Experience
@@ -10,23 +12,28 @@ let create_player () =
     [ Position.create @@ Vector2.create 40. 30.
     ; Velocity.create @@ Vector2.zero ()
       (* ; ShapeRenderer.C.create @@ Circle (10., Color.red) *)
-    ; SpriteRenderer.create_sprite_sheet
+    ; create_sprite_sheet
         (Textures.get "resources/Warrior_Blue.png")
         (Vector2.create 0. 0.)
         (Vector2.create 0.5 0.5)
         (6, 8)
-    ; SpriteRenderer.create_animator (0, 5)
-    ; SpriteRenderer.FlipSprite.create ()
-    ; Animation.create_controller [ "idle", (0, 5); "walk", (6, 11) ]
+    ; create_animator (0, 5)
+    ; Flip_sprite.create ()
+    ; create_animation_controller
+        [ "idle", (0, 5); "walk", (6, 11) ]
+        (fun id ->
+          match Velocity.get_opt id with
+          | Some v when Vector2.length v > 0. -> "walk"
+          | _ -> "idle")
       (* ; ShapeRenderer.C.create @@ Circle (20., Color.green) *)
-    ; Collision.Shape.create
+    ; Collision_shape.create
         { shape = Circle 20.
         ; mask =
             Utils.collision_mask
               [ Utils.collision_layer_player; Utils.collision_layer_experience ]
         }
     ; Player.Tag.create @@ ()
-    ; FollowCamera.create ()
+    ; Follow_camera.create ()
     ; Health.create { current = 100.; max = 100. }
     ; Experience.create (ref 0)
     ; Level.create 1

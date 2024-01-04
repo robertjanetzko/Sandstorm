@@ -1,5 +1,7 @@
 open Sandstorm
 open Sandstorm_raylib
+open Sandstorm_raylib_types
+open Sandstorm_raylib_components
 open Components
 open Raylib
 open Util
@@ -11,8 +13,8 @@ let create_projectile pos velocity =
     [ Position.create pos
     ; Velocity.create velocity
     ; Projectile.create ()
-    ; ShapeRenderer.C.create (Circle (5., Color.white))
-    ; Collision.Shape.create
+    ; Shape.create (Circle (5., Color.white))
+    ; Collision_shape.create
         { shape = Circle 5.
         ; mask = Utils.collision_mask [ Utils.collision_layer_projectile ]
         }

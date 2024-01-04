@@ -1,5 +1,6 @@
 open Sandstorm
 open Sandstorm_raylib
+open Sandstorm_raylib_systems
 open Systems
 
 module VampireWorld = struct
@@ -26,16 +27,16 @@ module VampireWorld = struct
           ; Collision.cleanup_system
           ; Spawner.system
           ; MobFollow.system
-          ; velocity_system
-          ; SpriteRenderer.flip_sprite_system
-          ; Animation.system
-          ; SpriteRenderer.animation_system
+          ; Velocity.velocity_system
+          ; Flip_sprite.flip_sprite_system
+          ; Animation_controller.system
+          ; Animation.animation_system
          |]
     |]
   ;;
 
   let render_systems =
-    [| SpriteRenderer.system; ShapeRenderer.system (*; position_index_debug_system*) |]
+    [| Sprite_renderer.system; Shape_renderer.system (*; position_index_debug_system*) |]
   ;;
 
   let ui_systems =

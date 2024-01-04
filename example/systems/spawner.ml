@@ -1,5 +1,7 @@
 open Sandstorm
 open Sandstorm_raylib
+open Sandstorm_raylib_types
+open Sandstorm_raylib_components
 open Components
 open Util
 open Raylib
@@ -12,16 +14,21 @@ let spawn_mob () =
     [ Position.create pos
     ; Velocity.create @@ Vector2.zero ()
       (* ; ShapeRenderer.C.create (Circle (20., Color.blue)) *)
-    ; SpriteRenderer.create_sprite_sheet
+    ; create_sprite_sheet
         (Textures.get "resources/Torch_Red.png")
         (Vector2.create 0. 0.)
         (Vector2.create 0.5 0.5)
         (7, 5)
-    ; SpriteRenderer.create_animator (7, 12)
-    ; SpriteRenderer.FlipSprite.create ()
-    ; Animation.create_controller [ "idle", (0, 6); "walk", (7, 12) ]
+    ; create_animator (7, 12)
+    ; Flip_sprite.create ()
+    ; create_animation_controller
+        [ "idle", (0, 6); "walk", (7, 12) ]
+        (fun id ->
+          match Velocity.get_opt id with
+          | Some v when Vector2.length v > 0. -> "walk"
+          | _ -> "idle")
     ; Mob.Tag.create ()
-    ; Collision.Shape.create
+    ; Collision_shape.create
         { shape = Circle 10.
         ; mask =
             Utils.collision_mask

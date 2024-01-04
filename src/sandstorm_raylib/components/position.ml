@@ -1,6 +1,6 @@
 open Sandstorm
-open Sandstorm_raylib_types
+open Raylib
 
-type s = { timer : Timer.t }
+type s = Vector2.t
 
 include (val Component.create () : Component.Sig with type t = s)

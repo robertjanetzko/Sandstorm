@@ -54,3 +54,19 @@ let aquery (module C : Sig) (entities : Entity.id_t Seq.t) = Seq.filter C.is ent
 let aquery2 (entities : Entity.id_t Seq.t) (module C : Sig) = Seq.filter C.is entities
 let ( >? ) = aquery2
 let ( >! ) = Seq.iter
+
+module type COMPONENT = sig
+  type s
+end
+
+module Make (C : COMPONENT) = struct
+  type s = C.s
+
+  include (val create () : Sig with type t = s)
+end
+
+module MakeTag () = struct
+  type s = unit
+
+  include (val create () : Sig with type t = s)
+end

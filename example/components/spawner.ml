@@ -1,5 +1,5 @@
 open Sandstorm
-open Sandstorm_raylib
+open Sandstorm_raylib_types
 
 type s = { timer : Timer.t }
 

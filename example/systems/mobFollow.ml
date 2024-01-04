@@ -1,12 +1,12 @@
 open Sandstorm
-open Sandstorm_raylib
+open Sandstorm_raylib_components
 open Components
 open Raylib
 
-let would_collide id new_pos =
-  let s = Component.(query (module Collision.Shape) >? (module Position)) in
-  Seq.exists (fun id2 -> Collision.overlap ~new_p1:(Some new_pos) id id2) s
-;;
+(* let would_collide id new_pos =
+   let s = Component.(query (module Collision_shape) >? (module Position)) in
+   Seq.exists (fun id2 -> Collision.overlap ~new_p1:(Some new_pos) id id2) s
+   ;; *)
 
 let system =
   System.for_each
