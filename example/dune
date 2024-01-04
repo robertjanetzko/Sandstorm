@@ -2,4 +2,5 @@
  (public_name example)
  (name main)
  (modes byte exe)
- (libraries sandstorm types components systems))
+ (package sandstorm_raylib)
+ (libraries sandstorm_raylib types components systems))

@@ -1,4 +1,5 @@
 open Sandstorm
+open Sandstorm_raylib
 
 module Controller = struct
   type s =

@@ -18,4 +18,11 @@
  (synopsis "Ocaml game engine")
  (description
   "a prototype game engine written in OCaml using ECS and raylib")
- (depends ocaml dune raylib raygui))
+ (depends ocaml dune))
+
+(package
+ (name sandstorm_raylib)
+ (synopsis "Ocaml game engine")
+ (description
+  "a prototype game engine written in OCaml using ECS and raylib")
+ (depends ocaml dune sandstorm raylib raygui))

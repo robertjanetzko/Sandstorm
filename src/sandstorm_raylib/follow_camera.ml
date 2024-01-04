@@ -1,3 +1,4 @@
+open Sandstorm
 open Raylib
 open Default_components
 
@@ -9,6 +10,6 @@ end
 
 let system =
   System.for_each_state
-    Qq.((module Position) ^? (module C))
+    Sandstorm.((module Position) ^? (module C))
     (fun state _id pos _cam -> Camera2D.set_target state.camera pos)
 ;;

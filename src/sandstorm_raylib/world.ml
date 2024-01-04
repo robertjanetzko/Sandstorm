@@ -29,7 +29,7 @@ functor
         1.0
     ;;
 
-    let state : Game.state_t = { camera = default_camera }
+    let state : Game.t = { camera = default_camera }
 
     let process_systems systems =
       Array.iter (fun (module S : System.Sig) -> S.process state) systems

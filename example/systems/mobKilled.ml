@@ -1,6 +1,6 @@
 open Raylib
 open Sandstorm
-open Sandstorm.DefaultComponents
+open Sandstorm_raylib
 open Components
 open Util
 

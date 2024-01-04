@@ -1,5 +1,5 @@
 open Sandstorm
-open Sandstorm.DefaultComponents
+open Sandstorm_raylib
 open Components
 open Components.Health
 open Components.Experience
@@ -30,7 +30,7 @@ let create_player () =
     ; Health.create { current = 100.; max = 100. }
     ; Experience.create (ref 0)
     ; Level.create 1
-    ; Components.Shooter.create { timer = Timer.delay 5. }
+    ; Components.Shooter.create { timer = Timer.delay 0.7 }
     ]
 ;;
 

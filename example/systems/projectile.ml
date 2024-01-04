@@ -1,4 +1,5 @@
 open Sandstorm
+open Sandstorm_raylib
 open Components
 
 let cleanup_system =

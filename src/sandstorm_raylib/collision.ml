@@ -1,3 +1,4 @@
+open Sandstorm
 open Raylib
 open Default_components
 
@@ -47,7 +48,7 @@ module Shape = struct
 
   let create c id =
     create c id;
-    sorted_list := Util.insert cmp_min_x id !sorted_list
+    sorted_list := ListUtil.insert cmp_min_x id !sorted_list
   ;;
 
   let remove id =
@@ -55,7 +56,7 @@ module Shape = struct
     remove id
   ;;
 
-  let sort_axis () = sorted_list := Util.insertion_sort cmp_min_x !sorted_list
+  let sort_axis () = sorted_list := ListUtil.insertion_sort cmp_min_x !sorted_list
 end
 
 module Impact = struct
@@ -127,5 +128,5 @@ let system =
 ;;
 
 let cleanup_system =
-  System.for_each (Qq.query (module Impact)) (fun id _impact -> Impact.remove id)
+  System.for_each (Sandstorm.query (module Impact)) (fun id _impact -> Impact.remove id)
 ;;

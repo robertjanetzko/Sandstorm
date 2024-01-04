@@ -10,6 +10,9 @@ bug-reports: "https://github.com/robertjanetzko/Sandstorm/issues"
 depends: [
   "ocaml"
   "dune" {>= "3.12"}
+  "sandstorm"
+  "raylib"
+  "raygui"
   "odoc" {with-doc}
 ]
 build: [

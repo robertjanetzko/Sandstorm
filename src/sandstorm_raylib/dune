@@ -1,0 +1,4 @@
+(library
+ (name sandstorm_raylib)
+ (public_name sandstorm_raylib)
+ (libraries sandstorm raylib raygui))

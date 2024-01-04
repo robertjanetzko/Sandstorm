@@ -1,15 +1,8 @@
 module Component = Component
-module Collision = Collision
-module DefaultComponents = Default_components
 module Entity = Entity
-module FollowCamera = Follow_camera
-module Game = Game
-module ShapeRenderer = Shape_renderer
-module SpriteRenderer = Sprite_renderer
-module System = System
-module World = World
+module BaseSystem = System
 module Timer = Timer
-module Quadtree = Quadtree
+module ListUtil = Util
 
 (* let query = Query.query
    let query2 = Query.query2
