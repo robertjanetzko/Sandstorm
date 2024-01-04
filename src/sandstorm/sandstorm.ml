@@ -1,6 +1,7 @@
 module Component = Component
 module Entity = Entity
 module BaseSystem = System
+module World = World
 module ListUtil = Util
 
 (* let query = Query.query

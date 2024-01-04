@@ -6,7 +6,7 @@ module VampireWorld = struct
   (* let player_alive _state = Option.is_some @@ PlayerInput.C.first () *)
   (* let run_game state = player_alive state && no_menu state *)
 
-  let systems =
+  let game_systems =
     [| System.create_group
          ~condition:no_menu
          [| (* position_index_system *)
@@ -52,6 +52,6 @@ module VampireWorld = struct
   ;;
 end
 
-module Game = World.Make (VampireWorld)
+module Game = World.RMake (VampireWorld)
 
 let () = Game.run ()
