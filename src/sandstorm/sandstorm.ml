@@ -1,7 +1,6 @@
 module Component = Component
 module Entity = Entity
 module BaseSystem = System
-module Timer = Timer
 module ListUtil = Util
 
 (* let query = Query.query
