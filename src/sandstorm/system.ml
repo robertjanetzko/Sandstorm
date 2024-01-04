@@ -13,7 +13,7 @@ module Make (G : GAMESTATE) = struct
 
   let for_each query process =
     let module Def = struct
-      let process _state = Qq.for_each query process
+      let process _state = Query.for_each query process
     end
     in
     (module Def : Sig)
@@ -21,7 +21,7 @@ module Make (G : GAMESTATE) = struct
 
   let for_each_state query process =
     let module Def = struct
-      let process state = Qq.for_each query (process state)
+      let process state = Query.for_each query (process state)
     end
     in
     (module Def : Sig)

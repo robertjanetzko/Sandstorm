@@ -95,20 +95,6 @@ let detect id1 id2 =
   then Impact.set { other = id2; position = Position.get id1 } id1
 ;;
 
-(* let system =
-   System.create2
-   (module Shape)
-   (module Position)
-   (fun id _s1 p1 ->
-   let s =
-   Quadtree.query ~center:p1 ~radius:30. Position.quadtree
-   |> List.to_seq
-   |> Seq.filter Shape.is
-   in
-   (* let s = Component.(query (module Shape) >? (module Position)) in *)
-   Seq.iter (detect id) s)
-   ;; *)
-
 module IdSet = Set.Make (Int)
 
 let system =

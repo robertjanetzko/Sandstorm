@@ -8,14 +8,15 @@ module ListUtil = Util
    let ( >& ) = Query.( >& )
    let ( >&& ) = Query.( >&& ) *)
 
-type 'a comp = 'a Qq.comp
-type 'a query = 'a Qq.query
+type 'a comp = 'a Query.comp
+type 'a query = 'a Query.query
 
-let query_eval = Qq.eval
-let query_each = Qq.for_each
-let query = Qq.query
-let ( ^& ) = Qq.( ^& )
-let ( ^? ) = Qq.( ^? )
+let query_eval = Query.eval
+let query_matches = Query.is
+let query_each = Query.for_each
+let query = Query.query
+let ( ^& ) = Query.( ^& )
+let ( ^? ) = Query.( ^? )
 
 let destroy_entity id =
   let modules = !Component.allComponents in

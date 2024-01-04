@@ -6,6 +6,7 @@ type 'a query =
 
 exception EmptyQuery
 
+val is : int -> 'a query -> bool
 val eval : int -> 'a query -> 'a -> unit
 val for_each : 'a. 'a query -> (int -> 'a) -> unit
 val ( ^& ) : 'a comp -> 'b query -> ('a -> 'b) query

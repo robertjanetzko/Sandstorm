@@ -1,32 +1,44 @@
-type 'a q =
-  { component : (module Component.Sig with type t = 'a)
-  ; conditions : (module Component.Sig) list
-  }
+type 'a comp = (module Component.Sig with type t = 'a)
 
-type ('a, 'b) q2 =
-  { component1 : (module Component.Sig with type t = 'a)
-  ; component2 : (module Component.Sig with type t = 'b)
-  ; conditions2 : (module Component.Sig) list
-  }
+type 'a query =
+  | And : 'c comp * 'a query -> ('c -> 'a) query
+  | Query : unit query
 
-type 'a qu =
-  | Q : 'a q -> 'a qu
-  | Q2 : ('a, 'b) q2 -> ('a * 'b) qu
-
-let query cmp = Q { component = cmp; conditions = [] }
-let query2 cmp1 cmp2 = Q2 { component1 = cmp1; component2 = cmp2; conditions2 = [] }
-
-let query_with q cond =
-  match q with
-  | Q q1 -> Q { q1 with conditions = cond :: q1.conditions }
-  | _ -> assert false
+let rec evaluate_query : type a. int -> a -> a query -> unit =
+  fun id f args ->
+  match args with
+  | Query -> f
+  | And ((module M), r) -> evaluate_query id (f (M.get id)) r
 ;;
 
-let query_with2 q cond =
-  match q with
-  | Q2 q2 -> Q2 { q2 with conditions2 = cond :: q2.conditions2 }
-  | _ -> assert false
+let rec match_query : type a. int -> a query -> bool =
+  fun id args ->
+  match args with
+  | Query -> true
+  | And ((module M), r) -> if M.is id then match_query id r else false
 ;;
 
-let ( >& ) = query_with
-let ( >&& ) = query_with2
+exception EmptyQuery
+
+let eval id q f = evaluate_query id f q
+let is id q = match_query id q
+let query m = And (m, Query)
+let query_with m q = And (m, q)
+let ( ^& ) a b = query_with a b
+let ( ^? ) a b = query_with a (query b)
+
+let for_each : type a. a query -> (int -> a) -> unit =
+  fun query f ->
+  let rec aux : type a. int -> a -> a query -> unit =
+    fun id f query ->
+    match query with
+    | Query -> f
+    | And ((module M), r) ->
+      (match M.get_opt id with
+       | None -> ()
+       | Some m -> aux id (f m) r)
+  in
+  match query with
+  | And ((module M), r) -> M.iter (fun id m -> aux id (f id m) r)
+  | _ -> raise EmptyQuery
+;;

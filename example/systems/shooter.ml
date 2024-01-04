@@ -21,7 +21,7 @@ let create_projectile pos velocity =
 ;;
 
 let fire pos =
-  let p = Position.nearest Mob.Tag.is pos in
+  let p = nearest_position (query (module Mob.Tag)) pos in
   match p with
   | Some (_, p) ->
     let dir = Vector2.subtract p pos |> Vector2.normalize in
