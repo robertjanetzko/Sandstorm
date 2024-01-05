@@ -33,9 +33,9 @@ let experience_ui_system =
       Raylib.draw_text msg ((w - msg_w) / 2) (h - 10) 10 Color.white)
 ;;
 
-let skill_button id (x, y) skill_id =
+let skill_button id (x, y) key skill_id =
   let skill = Types.Skills.skills.(skill_id) in
-  if button (Rectangle.create x y 200. 40.) skill.name
+  if button (Rectangle.create x y 200. 40.) skill.name || Raylib.is_key_pressed key
   then (
     Util.Player.player_apply_skill skill;
     destroy_entity id)
@@ -45,9 +45,9 @@ let level_up_ui_system =
   System.for_each
     (query (module Components.Ui.LevelUp))
     (fun id menu ->
-      skill_button id (90., 400.) menu.skill_id_1;
-      skill_button id (300., 400.) menu.skill_id_2;
-      skill_button id (510., 400.) menu.skill_id_3)
+      skill_button id (90., 400.) Key.One menu.skill_id_1;
+      skill_button id (300., 400.) Key.Two menu.skill_id_2;
+      skill_button id (510., 400.) Key.Three menu.skill_id_3)
 ;;
 
 let game_over_ui_system =

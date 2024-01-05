@@ -32,6 +32,7 @@ let fire pos =
 
 let system =
   System.for_each
-    ((module Shooter) ^? (module Position))
-    (fun _id c pos -> if Timer.step c.timer then fire pos)
+    ((module Shooter) ^& (module Stats) ^? (module Position))
+    (fun _id shooter stats pos ->
+      if Timer.step_mult stats.fire_rate_multiplier shooter.timer then fire pos)
 ;;
