@@ -1,6 +1,37 @@
 open Sandstorm
+open Components
 open Raylib
 open Raygui
+
+let health_ui_system =
+  System.for_each
+    ((module Health.Health) ^? (module Player.Tag))
+    (fun _id health _input ->
+      let open Raylib in
+      let w = get_render_width () in
+      let h = get_render_height () in
+      draw_rectangle 0 (h - 20) w 10 Color.gray;
+      let exp_w = int_of_float (float_of_int w *. health.current /. health.max) in
+      draw_rectangle 0 (h - 20) exp_w 10 Color.red;
+      let msg = string_of_float health.current in
+      let msg_w = Raylib.measure_text msg 10 in
+      Raylib.draw_text msg ((w - msg_w) / 2) (h - 20) 10 Color.white)
+;;
+
+let experience_ui_system =
+  System.for_each
+    ((module Experience.Experience) ^? (module Player.Tag))
+    (fun _id amount _input ->
+      let open Raylib in
+      let w = get_render_width () in
+      let h = get_render_height () in
+      draw_rectangle 0 (h - 10) w 10 Color.gray;
+      let exp_w = w * !amount / 1000 in
+      draw_rectangle 0 (h - 10) exp_w 10 Color.darkblue;
+      let msg = string_of_int !amount in
+      let msg_w = Raylib.measure_text msg 10 in
+      Raylib.draw_text msg ((w - msg_w) / 2) (h - 10) 10 Color.white)
+;;
 
 let skill_button id (x, y) skill_id =
   let skill = Types.Skills.skills.(skill_id) in
@@ -37,5 +68,11 @@ let player_stats_system =
 ;;
 
 let group =
-  System.create_group [| player_stats_system; level_up_ui_system; game_over_ui_system |]
+  System.create_group
+    [| player_stats_system
+     ; health_ui_system
+     ; experience_ui_system
+     ; level_up_ui_system
+     ; game_over_ui_system
+    |]
 ;;

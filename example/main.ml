@@ -39,11 +39,11 @@ module VampireWorld = struct
     [| Sprite_renderer.system; Shape_renderer.system (*; position_index_debug_system*) |]
   ;;
 
-  let ui_systems = [| Health.ui_system; Experience.ui_system; Systems.Ui.group |]
+  let ui_systems = [| Systems.Ui.group |]
 
   let setup () =
     Util.Player.create_player ();
-    Spawner.create_mob_spawner 0.3
+    Util.Mob.create_mob_spawner ~spawn_rate:0.3
   ;;
 end
 
