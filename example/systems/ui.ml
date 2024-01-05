@@ -1,4 +1,5 @@
 open Sandstorm
+open Sandstorm_raylib
 open Components
 open Raylib
 open Raygui
@@ -8,8 +9,8 @@ let health_ui_system =
     ((module Health.Health) ^? (module Player.Tag))
     (fun _id health _input ->
       let open Raylib in
-      let w = get_render_width () in
-      let h = get_render_height () in
+      let w = Window.width_i () in
+      let h = Window.height_i () in
       draw_rectangle 0 (h - 20) w 10 Color.gray;
       let exp_w = int_of_float (float_of_int w *. health.current /. health.max) in
       draw_rectangle 0 (h - 20) exp_w 10 Color.red;
@@ -23,8 +24,8 @@ let experience_ui_system =
     ((module Experience.Experience) ^? (module Player.Tag))
     (fun _id amount _input ->
       let open Raylib in
-      let w = get_render_width () in
-      let h = get_render_height () in
+      let w = Window.width_i () in
+      let h = Window.height_i () in
       draw_rectangle 0 (h - 10) w 10 Color.gray;
       let exp_w = w * !amount / 1000 in
       draw_rectangle 0 (h - 10) exp_w 10 Color.darkblue;

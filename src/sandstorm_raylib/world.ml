@@ -13,11 +13,7 @@ module Make (W : WORLD) = struct
   module R = struct
     let camera =
       let open Raylib in
-      Camera2D.create
-        (Vector2.create (Float.of_int 800 /. 2.0) (Float.of_int 600 /. 2.0))
-        (Vector2.zero ())
-        0.0
-        1.0
+      Camera2D.create (Vector2.zero ()) (Vector2.zero ()) 0.0 1.0
     ;;
 
     let update_camera () =
@@ -28,6 +24,8 @@ module Make (W : WORLD) = struct
 
     let setup () =
       init_window 800 600 "raylib [core] example - mouse input";
+      init_audio_device ();
+      set_master_volume 1.;
       set_window_position 0 0;
       set_window_state [ ConfigFlags.Window_resizable ];
       set_target_fps 60;
@@ -38,11 +36,7 @@ module Make (W : WORLD) = struct
 
     let runner =
       System.base (fun state ->
-        Camera2D.set_offset
-          camera
-          (Vector2.create
-             (Float.of_int (get_render_width ()) /. 2.0)
-             (Float.of_int (get_render_height ()) /. 2.0));
+        Camera2D.set_offset camera (Vector2.scale (Window.size ()) 0.5);
         let process_systems systems =
           Array.iter (fun (module S : System.Sig) -> S.process state) systems
         in

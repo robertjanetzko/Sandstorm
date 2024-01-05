@@ -1,4 +1,7 @@
 module World = World
+module Textures = Textures
+module Sounds = Sounds
+module Window = Window
 include Sandstorm_raylib_types
 open Sandstorm
 open Sandstorm_raylib_components
