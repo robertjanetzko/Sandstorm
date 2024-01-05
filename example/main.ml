@@ -24,7 +24,7 @@ module VampireWorld = struct
           ; Mob.mob_killed_system
           ; Player.player_died_system
           ; Health.death_system
-          ; Projectile.cleanup_system
+          ; Projectile.system
           ; Collision.cleanup_system
           ; Spawner.system
           ; Velocity.velocity_system
