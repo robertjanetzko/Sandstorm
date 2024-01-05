@@ -19,14 +19,14 @@ module VampireWorld = struct
           ; Shooter.system
           ; Experience.pickup_system
           ; Experience.level_up_system
+          ; Mob.chase_player_system
           ; Health.system
-          ; MobKilled.mob_killed_system
+          ; Mob.mob_killed_system
           ; Player.player_died_system
           ; Health.death_system
           ; Projectile.cleanup_system
           ; Collision.cleanup_system
           ; Spawner.system
-          ; MobFollow.system
           ; Velocity.velocity_system
           ; Flip_sprite.flip_sprite_system
           ; Animation_controller.system
@@ -39,16 +39,10 @@ module VampireWorld = struct
     [| Sprite_renderer.system; Shape_renderer.system (*; position_index_debug_system*) |]
   ;;
 
-  let ui_systems =
-    [| Health.ui_system
-     ; Experience.ui_system
-     ; Systems.Ui.level_up_ui_system
-     ; Systems.Ui.game_over_ui_system
-    |]
-  ;;
+  let ui_systems = [| Health.ui_system; Experience.ui_system; Systems.Ui.group |]
 
   let setup () =
-    Util.GameUtil.create_player ();
+    Util.Player.create_player ();
     Spawner.create_mob_spawner 0.3
   ;;
 end

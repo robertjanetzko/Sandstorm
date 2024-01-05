@@ -28,11 +28,12 @@ let create_player () =
     ; Collision_shape.create
         { shape = Circle 20.
         ; mask =
-            Utils.collision_mask
-              [ Utils.collision_layer_player; Utils.collision_layer_experience ]
+            Collision.create_mask
+              [ Collision.collision_layer_player; Collision.collision_layer_experience ]
         }
     ; Player.Tag.create @@ ()
     ; Follow_camera.create ()
+    ; Stats.create Types.Stats.default
     ; Health.create { current = 100.; max = 100. }
     ; Experience.create (ref 0)
     ; Level.create 1
@@ -40,9 +41,17 @@ let create_player () =
     ]
 ;;
 
-let reset () =
-  Mob.Tag.all () |> Seq.iter destroy_entity;
-  Projectile.all () |> Seq.iter destroy_entity;
-  Pickup.all () |> Seq.iter destroy_entity;
-  create_player ()
+let player_pos () =
+  match Player.Tag.first () with
+  | Some (player_id, _) ->
+    (match Position.get_opt player_id with
+     | Some player_pos -> player_pos
+     | None -> Raylib.Vector2.zero ())
+  | None -> Raylib.Vector2.zero ()
+;;
+
+let player_apply_skill (skill : Types.Skills.t) =
+  query_each
+    ((module Player.Tag) ^? (module Stats))
+    (fun _id _p stats -> Types.Stats.combine stats skill.stats)
 ;;

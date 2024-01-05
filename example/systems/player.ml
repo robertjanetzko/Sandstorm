@@ -3,7 +3,6 @@ open Sandstorm_raylib_components
 open Raylib
 open Components
 open Components.Health
-open Util
 
 let input_direction () =
   let open Raylib in
@@ -24,5 +23,5 @@ let system =
 let player_died_system =
   System.for_each
     ((module Player.Tag) ^? (module Dead))
-    (fun _id _input _dead -> UiHelper.showGameOver ())
+    (fun _id _input _dead -> Util.Ui.show_game_over ())
 ;;

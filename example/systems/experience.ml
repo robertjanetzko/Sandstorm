@@ -2,7 +2,6 @@ open Sandstorm
 open Sandstorm_raylib_components
 open Components
 open Components.Experience
-open Util
 
 let pickup amount entity =
   match Experience.get_opt entity with
@@ -40,5 +39,5 @@ let level_up_system =
       if !amount >= 100 * level
       then (
         Level.set (level + 1) id;
-        UiHelper.showLevelUp ()))
+        Util.Ui.show_level_up ()))
 ;;

@@ -6,7 +6,7 @@ open Util
 open Raylib
 
 let spawn_mob () =
-  let player_pos = Utils.player_pos () in
+  let player_pos = Util.Player.player_pos () in
   let angle = Random.float 6.28318530718 in
   let pos = Vector2.add player_pos @@ Vector2.rotate (Vector2.create 400. 0.) angle in
   Entity.create
@@ -30,8 +30,10 @@ let spawn_mob () =
     ; Collision_shape.create
         { shape = Circle 10.
         ; mask =
-            Utils.collision_mask
-              [ Utils.collision_layer_projectile; Utils.collision_layer_player ]
+            Util.Collision.create_mask
+              [ Util.Collision.collision_layer_projectile
+              ; Util.Collision.collision_layer_player
+              ]
         }
     ; Health.Health.create { current = 1.; max = 1. }
     ]

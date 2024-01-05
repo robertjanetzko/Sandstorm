@@ -1,9 +1,9 @@
 open Sandstorm
 open Components.Ui
 
-let showGameOver () = Entity.create [ Menu.create (); GameOver.create () ]
+let show_game_over () = Entity.create [ Menu.create (); GameOver.create () ]
 
-let showLevelUp () =
+let show_level_up () =
   Entity.create
     [ Menu.create ()
     ; LevelUp.create

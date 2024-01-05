@@ -3,7 +3,6 @@ open Sandstorm_raylib
 open Sandstorm_raylib_components
 open Components
 open Raylib
-open Util
 
 let create cooldown = Shooter.create { timer = Timer.delay cooldown }
 
@@ -15,9 +14,9 @@ let create_projectile pos velocity =
     ; Shape.create (Circle (5., Color.white))
     ; Collision_shape.create
         { shape = Circle 5.
-        ; mask = Utils.collision_mask [ Utils.collision_layer_projectile ]
+        ; mask = Util.Collision.create_mask [ Util.Collision.collision_layer_projectile ]
         }
-    ; Damage.C.create { amount = 1. }
+    ; Damage.create { amount = 1. }
     ]
 ;;
 

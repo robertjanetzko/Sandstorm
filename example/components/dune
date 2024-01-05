@@ -1,3 +1,3 @@
 (library
  (name components)
- (libraries sandstorm.raylib))
+ (libraries sandstorm.raylib types))
