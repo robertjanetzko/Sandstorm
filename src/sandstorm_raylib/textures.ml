@@ -10,3 +10,5 @@ let get name =
     Hashtbl.add textures name t;
     t
 ;;
+
+let cleanup () = Hashtbl.iter (fun _name texture -> unload_texture texture) textures

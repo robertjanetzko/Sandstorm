@@ -42,9 +42,13 @@ module VampireWorld = struct
   let ui_systems = [| Systems.Ui.group |]
 
   let setup () =
+    Raylib.set_music_volume (Music_streams.get "resources/mini1111.xm") 0.3;
+    Raylib.play_music_stream @@ Music_streams.get "resources/mini1111.xm";
     Util.Player.create_player ();
     Util.Mob.create_mob_spawner ~spawn_rate:0.3
   ;;
+
+  let cleanup () = ()
 end
 
 module Game = World.Make (VampireWorld)

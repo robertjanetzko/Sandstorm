@@ -2,6 +2,7 @@ module type WORLD = sig
   val systems : (module System.Sig) array
   val setup : unit -> unit
   val should_stop : unit -> bool
+  val cleanup : unit -> unit
 end
 
 module Make (W : WORLD) = struct
@@ -15,6 +16,7 @@ module Make (W : WORLD) = struct
 
   let run () =
     W.setup ();
-    loop ()
+    loop ();
+    W.cleanup ()
   ;;
 end

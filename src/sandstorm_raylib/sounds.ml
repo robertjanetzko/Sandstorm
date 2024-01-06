@@ -10,3 +10,5 @@ let get name =
     Hashtbl.add sounds name t;
     t
 ;;
+
+let cleanup () = Hashtbl.iter (fun _name sound -> unload_sound sound) sounds

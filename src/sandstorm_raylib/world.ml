@@ -7,6 +7,7 @@ module type WORLD = sig
   val render_systems : (module System.Sig) array
   val ui_systems : (module System.Sig) array
   val setup : unit -> unit
+  val cleanup : unit -> unit
 end
 
 module Make (W : WORLD) = struct
@@ -36,6 +37,7 @@ module Make (W : WORLD) = struct
 
     let runner =
       System.base (fun state ->
+        Music_streams.update_all ();
         Camera2D.set_offset camera (Vector2.scale (Window.size ()) 0.5);
         let process_systems systems =
           Array.iter (fun (module S : System.Sig) -> S.process state) systems
@@ -53,6 +55,15 @@ module Make (W : WORLD) = struct
     ;;
 
     let systems = [| runner |]
+
+    let cleanup () =
+      W.cleanup ();
+      Textures.cleanup ();
+      Sounds.cleanup ();
+      Music_streams.cleanup ();
+      close_audio_device ();
+      close_window ()
+    ;;
   end
 
   include Sandstorm.World.Make (R)

@@ -17,6 +17,7 @@ let simple =
 module SimpleWorld = struct
   let systems = [| simple |]
   let setup () = Entity.create [ Counter.create @@ ref 0. ]
+  let cleanup () = ()
 
   let should_stop () =
     match Counter.first () with

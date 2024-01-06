@@ -1,6 +1,7 @@
 module World = World
 module Textures = Textures
 module Sounds = Sounds
+module Music_streams = Music_streams
 module Window = Window
 include Sandstorm_raylib_types
 open Sandstorm
