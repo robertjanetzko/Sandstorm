@@ -6,15 +6,15 @@ open Raygui
 
 let health_ui_system =
   System.for_each
-    ((module Health.Health) ^? (module Player.Tag))
-    (fun _id health _input ->
+    ((module Stats) ^? (module Player.Tag))
+    (fun _id stats _input ->
       let open Raylib in
       let w = Window.width_i () in
       let h = Window.height_i () in
       draw_rectangle 0 (h - 20) w 10 Color.gray;
-      let exp_w = int_of_float (float_of_int w *. health.current /. health.max) in
+      let exp_w = int_of_float (float_of_int w *. stats.health /. stats.health_maximum) in
       draw_rectangle 0 (h - 20) exp_w 10 Color.red;
-      let msg = string_of_float health.current in
+      let msg = Format.sprintf "%.0f / %.0f" stats.health stats.health_maximum in
       let msg_w = Raylib.measure_text msg 10 in
       Raylib.draw_text msg ((w - msg_w) / 2) (h - 20) 10 Color.white)
 ;;
@@ -58,8 +58,8 @@ let game_over_ui_system =
       draw_circle 100 100 50. Color.red;
       if button (Rectangle.create 100. 400. 200. 40.) "Restart"
       then (
-        Util.Game.reset ();
-        destroy_entity id))
+        destroy_entity id;
+        Util.Game.reset ()))
 ;;
 
 let player_stats_system =

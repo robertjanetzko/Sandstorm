@@ -4,9 +4,12 @@ open Sandstorm_raylib_components
 open Raylib
 
 let reset () =
+  Collision_impact.all () |> Seq.iter destroy_entity;
   Components.Mob.Tag.all () |> Seq.iter destroy_entity;
   Components.Projectile.all () |> Seq.iter destroy_entity;
   Components.Experience.Pickup.all () |> Seq.iter destroy_entity;
+  Components.Player.Tag.all () |> Seq.iter destroy_entity;
+  Components.Dead.all () |> Seq.iter destroy_entity;
   Player.create_player ()
 ;;
 

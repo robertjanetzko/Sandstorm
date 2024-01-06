@@ -2,7 +2,6 @@ open Sandstorm
 open Sandstorm_raylib_components
 open Raylib
 open Components
-open Components.Health
 
 let input_direction () =
   let open Raylib in
@@ -13,10 +12,10 @@ let input_direction () =
 
 let system =
   System.for_each
-    ((module Player.Tag) ^? (module Velocity))
-    (fun id _input _vel ->
+    ((module Player.Tag) ^& (module Velocity) ^? (module Stats))
+    (fun id _input _vel stats ->
       let dir = input_direction () in
-      let vel = Vector2.scale dir 150. in
+      let vel = Vector2.scale dir (150. *. stats.walk_speed_multiplier) in
       Velocity.set vel id)
 ;;
 

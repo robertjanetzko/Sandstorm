@@ -6,14 +6,14 @@ let impact_damage_system =
   System.for_each
     ((module Collision_impact) ^? (module Damage))
     (fun _id impact damage ->
-      match Health.Health.get_opt impact.other with
-      | Some health -> health.current <- health.current -. damage.amount
+      match Stats.get_opt impact.other with
+      | Some stats -> stats.health <- stats.health -. damage.amount
       | _ -> ())
 ;;
 
 let mob_damage_system =
   System.for_each
-    ((module Health.Health) ^& (module Collision_impact) ^? (module Player.Tag))
-    (fun _id health impact _input ->
-      if Mob.Tag.is impact.other then health.current <- health.current -. 100.)
+    ((module Player.Tag) ^& (module Collision_impact) ^? (module Stats))
+    (fun _id _player impact stats ->
+      if Mob.Tag.is impact.other then stats.health <- stats.health -. 10.)
 ;;

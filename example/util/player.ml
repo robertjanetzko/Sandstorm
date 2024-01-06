@@ -2,7 +2,6 @@ open Sandstorm
 open Sandstorm_raylib
 open Sandstorm_raylib_components
 open Components
-open Components.Health
 open Components.Experience
 open Raylib
 
@@ -34,7 +33,6 @@ let create_player () =
     ; Player.Tag.create @@ ()
     ; Follow_camera.create ()
     ; Stats.create Types.Stats.default
-    ; Health.create { current = 100.; max = 100. }
     ; Experience.create (ref 0)
     ; Level.create 1
     ; Components.Shooter.create { timer = Timer.delay 0.7 }

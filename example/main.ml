@@ -36,14 +36,17 @@ module VampireWorld = struct
   ;;
 
   let render_systems =
-    [| Sprite_renderer.system; Shape_renderer.system (*; position_index_debug_system*) |]
+    [| Sprite_renderer.system
+     ; Shape_renderer.system
+     ; Mob.health_bar_system (*; position_index_debug_system*)
+    |]
   ;;
 
   let ui_systems = [| Systems.Ui.group |]
 
   let setup () =
     Raylib.set_music_volume (Music_streams.get "resources/mini1111.xm") 0.3;
-    Raylib.play_music_stream @@ Music_streams.get "resources/mini1111.xm";
+    (* Raylib.play_music_stream @@ Music_streams.get "resources/mini1111.xm"; *)
     Util.Player.create_player ();
     Util.Mob.create_mob_spawner ~spawn_rate:0.3
   ;;

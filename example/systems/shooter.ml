@@ -10,7 +10,7 @@ let create_projectile pos velocity =
   Entity.create
     [ Position.create pos
     ; Velocity.create velocity
-    ; Projectile.create { lifetime = Timer.delay 1.; piercing = 2 }
+    ; Projectile.create { lifetime = Timer.delay 1.; piercing = 1 }
     ; Shape.create (Circle (5., Color.white))
     ; Collision_shape.create
         { shape = Circle 5.

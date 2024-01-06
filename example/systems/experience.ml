@@ -24,7 +24,7 @@ let level_up_system =
   System.for_each
     ((module Experience) ^& (module Level) ^? (module Player.Tag))
     (fun id amount level _input ->
-      if !amount >= 1000 * level
+      if !amount >= 100 * level
       then (
         Level.set (level + 1) id;
         Util.Ui.show_level_up ()))

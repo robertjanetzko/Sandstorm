@@ -31,7 +31,8 @@ let spawn_mob () =
             Collision.create_mask
               [ Collision.collision_layer_projectile; Collision.collision_layer_player ]
         }
-    ; Components.Health.Health.create { current = 1.; max = 1. }
+    ; Components.Stats.create
+        { Types.Stats.default with health = 3.; health_maximum = 3. }
     ]
 ;;
 
