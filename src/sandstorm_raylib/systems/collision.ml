@@ -52,3 +52,17 @@ let cleanup_system =
     (Sandstorm.query (module Collision_impact))
     (fun id _impact -> Collision_impact.remove id)
 ;;
+
+let debug_system =
+  System.for_each
+    Sandstorm.((module Collision_shape) ^? (module Position))
+    (fun _id shape pos ->
+      match shape.shape with
+      | Circle r ->
+        draw_circle_lines
+          (int_of_float @@ Vector2.x pos)
+          (int_of_float @@ Vector2.y pos)
+          r
+          Color.yellow
+      | Rect (w, h) -> draw_rectangle_v pos (Vector2.create w h) Color.yellow)
+;;

@@ -12,10 +12,9 @@ let create_projectile pos velocity =
     ; Velocity.create velocity
     ; Projectile.create { lifetime = Timer.delay 1.; piercing = 1 }
     ; Shape.create (Circle (5., Color.white))
-    ; Collision_shape.create
-        { shape = Circle 5.
-        ; mask = Util.Collision.create_mask [ Util.Collision.collision_layer_projectile ]
-        }
+    ; Collision_shape.create_shape
+        (Circle 5.)
+        (Util.Collision.create_mask [ Util.Collision.collision_layer_projectile ])
     ; Damage.create { amount = 1. }
     ]
 ;;

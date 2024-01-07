@@ -24,15 +24,13 @@ let create_player () =
           | Some v when Vector2.length v > 0. -> "walk"
           | _ -> "idle")
       (* ; ShapeRenderer.C.create @@ Circle (20., Color.green) *)
-    ; Collision_shape.create
-        { shape = Circle 20.
-        ; mask =
-            Collision.create_mask
-              [ Collision.collision_layer_player; Collision.collision_layer_experience ]
-        }
+    ; Collision_shape.create_shape
+        (Circle 20.)
+        (Collision.create_mask
+           [ Collision.collision_layer_player; Collision.collision_layer_experience ])
     ; Player.Tag.create @@ ()
     ; Follow_camera.create ()
-    ; Stats.create Types.Stats.default
+    ; Stats.create @@ Types.Stats.default ()
     ; Experience.create (ref 0)
     ; Level.create 1
     ; Components.Shooter.create { timer = Timer.delay 0.7 }

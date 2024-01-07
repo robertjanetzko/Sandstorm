@@ -25,14 +25,12 @@ let spawn_mob () =
           | Some v when Vector2.length v > 0. -> "walk"
           | _ -> "idle")
     ; Components.Mob.Tag.create ()
-    ; Collision_shape.create
-        { shape = Circle 10.
-        ; mask =
-            Collision.create_mask
-              [ Collision.collision_layer_projectile; Collision.collision_layer_player ]
-        }
+    ; Collision_shape.create_shape
+        (Circle 10.)
+        (Collision.create_mask
+           [ Collision.collision_layer_projectile; Collision.collision_layer_player ])
     ; Components.Stats.create
-        { Types.Stats.default with health = 3.; health_maximum = 3. }
+        { (Types.Stats.default ()) with health = 3.; health_maximum = 3. }
     ]
 ;;
 

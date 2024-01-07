@@ -23,3 +23,10 @@ let destroy_entity id =
   let modules = !Component.allComponents in
   List.iter (fun (module M : Component.Sig) -> M.remove id) modules
 ;;
+
+let destroy_all_entities () =
+  let modules = !Component.allComponents in
+  List.iter
+    (fun (module M : Component.Sig) -> M.iter (fun id _ -> destroy_entity id))
+    modules
+;;

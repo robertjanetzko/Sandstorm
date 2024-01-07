@@ -6,7 +6,7 @@ type t =
   ; mutable damage_multiplier : float
   }
 
-let default : t =
+let default () : t =
   { walk_speed_multiplier = 1.
   ; fire_rate_multiplier = 1.
   ; damage_multiplier = 1.
@@ -15,7 +15,7 @@ let default : t =
   }
 ;;
 
-let empty : t =
+let empty () : t =
   { health = 0.
   ; health_maximum = 0.
   ; walk_speed_multiplier = 0.
