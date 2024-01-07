@@ -26,10 +26,26 @@ let overlap ?(new_p1 = None) id1 id2 =
 
 let detect id1 id2 =
   if id1 != id2 && overlap id1 id2
-  then Collision_impact.set { other = id2; position = Position.get id1 } id1
+  then (
+    let s1 = Collision_shape.get id1 in
+    let s2 = Collision_shape.get id2 in
+    s1.new_overlapping_entities <- id2 :: s1.new_overlapping_entities;
+    s2.new_overlapping_entities <- id1 :: s2.new_overlapping_entities)
 ;;
 
+(* Collision_impact.set { other = id2; position = Position.get id1 } id1 *)
+
 module IdSet = Set.Make (Int)
+
+let update_overlaps id (shp : Collision_shape.s) =
+  List.iter
+    (fun id1 ->
+      match List.find_opt (Int.equal id1) shp.overlapping_entities with
+      | None -> Collision_impact.set { other = id; position = Position.get id1 } id1
+      | Some _ -> ())
+    shp.new_overlapping_entities;
+  shp.overlapping_entities <- shp.new_overlapping_entities
+;;
 
 let system =
   System.base (fun _state ->
@@ -39,12 +55,15 @@ let system =
     |> List.to_seq
     |> Seq.filter Collision_shape.is
     |> Seq.iter (fun id1 ->
+      let shp = Collision_shape.get id1 in
+      shp.new_overlapping_entities <- [];
       !active
       |> IdSet.iter (fun id2 ->
         if Collision_shape.min_x id1 > Collision_shape.max_x id2
         then active := IdSet.remove id2 !active
         else detect id1 id2);
-      active := IdSet.add id1 !active))
+      active := IdSet.add id1 !active);
+    Collision_shape.iter update_overlaps)
 ;;
 
 let cleanup_system =

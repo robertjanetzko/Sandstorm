@@ -6,6 +6,7 @@ type s =
   { shape : Collision_shape.t
   ; mask : int
   ; mutable overlapping_entities : Entity.id_t list
+  ; mutable new_overlapping_entities : Entity.id_t list
   }
 
 include (val Component.create () : Component.Sig with type t = s)
@@ -53,4 +54,7 @@ let remove id =
 ;;
 
 let sort_axis () = sorted_list := ListUtil.insertion_sort cmp_min_x !sorted_list
-let create_shape shape mask = create { shape; mask; overlapping_entities = [] }
+
+let create_shape shape mask =
+  create { shape; mask; overlapping_entities = []; new_overlapping_entities = [] }
+;;
