@@ -41,7 +41,12 @@ let update_overlaps id (shp : Collision_shape.s) =
   List.iter
     (fun id1 ->
       match List.find_opt (Int.equal id1) shp.overlapping_entities with
-      | None -> Collision_impact.set { other = id; position = Position.get id1 } id1
+      | None ->
+        (match Collision_impact.get_opt id1 with
+         | Some impact ->
+           Collision_impact.set { impact with others = id :: impact.others } id1
+         | None ->
+           Collision_impact.set { others = [ id ]; position = Position.get id1 } id1)
       | Some _ -> ())
     shp.new_overlapping_entities;
   shp.overlapping_entities <- shp.new_overlapping_entities

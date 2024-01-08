@@ -5,9 +5,13 @@ open Components
 let impact_system =
   System.for_each
     ((module Collision_impact) ^? (module Projectile))
-    (fun id _impact projectile ->
-      projectile.piercing <- projectile.piercing - 1;
-      if projectile.piercing <= 0 then destroy_entity id)
+    (fun id impact projectile ->
+      impact.others
+      |> query_iter
+           (query (module Mob.Tag))
+           (fun _id2 _mob ->
+             projectile.piercing <- projectile.piercing - 1;
+             if projectile.piercing <= 0 then destroy_entity id))
 ;;
 
 let lifetime_system =

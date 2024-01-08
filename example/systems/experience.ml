@@ -14,10 +14,14 @@ let pickup amount entity =
 
 let pickup_system =
   System.for_each
-    ((module Pickup) ^? (module Collision_impact))
-    (fun id amount impact ->
-      pickup amount impact.other;
-      destroy_entity id)
+    ((module Collision_impact) ^? (module Pickup))
+    (fun id impact amount ->
+      impact.others
+      |> query_iter
+           (query (module Player.Tag))
+           (fun id2 _player ->
+             pickup amount id2;
+             destroy_entity id))
 ;;
 
 let level_up_system =

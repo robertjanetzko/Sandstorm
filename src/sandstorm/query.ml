@@ -8,7 +8,10 @@ let rec evaluate_query : type a. int -> a -> a query -> unit =
   fun id f args ->
   match args with
   | Query -> f
-  | And ((module M), r) -> evaluate_query id (f (M.get id)) r
+  | And ((module M), r) ->
+    (match M.get_opt id with
+     | Some m -> evaluate_query id (f m) r
+     | None -> ())
 ;;
 
 let rec match_query : type a. int -> a query -> bool =
@@ -41,4 +44,8 @@ let for_each : type a. a query -> (int -> a) -> unit =
   match query with
   | And ((module M), r) -> M.iter (fun id m -> aux id (f id m) r)
   | _ -> raise EmptyQuery
+;;
+
+let iter : type a. a query -> (int -> a) -> Entity.id_t list -> unit =
+  fun query f list -> List.iter (fun id -> evaluate_query id (f id) query) list
 ;;

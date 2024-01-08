@@ -1,7 +1,7 @@
 open Sandstorm
 
 type s =
-  { other : Entity.id_t
+  { others : Entity.id_t list
   ; position : Raylib.Vector2.t
   }
 
