@@ -65,7 +65,9 @@ let game_over_ui_system =
 let player_stats_system =
   System.for_each
     ((module Components.Player.Tag) ^? (module Components.Stats))
-    (fun _id _p stats -> draw_text (Types.Stats.text stats) 10 40 8 Color.white)
+    (fun _id _p stats ->
+      draw_text (Types.Stats.text stats) 10 40 8 Color.white
+      (* draw_9_slice (Textures.get "resources/squares.png") 100 100 200 200 3 3 3 3 *))
 ;;
 
 let group =

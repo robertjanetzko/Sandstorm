@@ -55,3 +55,50 @@ let nearest_position query pos =
   | Some (id, pos, _) -> Some (id, pos)
   | _ -> None
 ;;
+
+let draw_9_slice texture x y w h inset_left inset_top inset_right inset_bottom =
+  match inset_left, inset_top, inset_right, inset_bottom with
+  | il, it, ir, ib ->
+    let open Raylib in
+    let tw = Texture.width texture in
+    let th = Texture.height texture in
+    let rect x y w h =
+      Rectangle.create (float_of_int x) (float_of_int y) (float_of_int w) (float_of_int h)
+    in
+    (* center *)
+    let src = rect il it (tw - il - ir) (th - it - ib) in
+    let dst = rect (x + il) (y + it) (w - il - ir) (h - it - ib) in
+    draw_texture_pro texture src dst (Vector2.create 0. 0.) 0. Color.white;
+    (* top left*)
+    let src = rect 0 0 il it in
+    let dst = rect x y il it in
+    draw_texture_pro texture src dst (Vector2.create 0. 0.) 0. Color.white;
+    (* top *)
+    let src = rect il 0 (tw - il - ir) it in
+    let dst = rect (x + il) y (w - il - ir) it in
+    draw_texture_pro texture src dst (Vector2.create 0. 0.) 0. Color.white;
+    (* top right *)
+    let src = rect (tw - ir) 0 ir it in
+    let dst = rect (x + w - ir) y ir it in
+    draw_texture_pro texture src dst (Vector2.create 0. 0.) 0. Color.white;
+    (* right *)
+    let src = rect (tw - ir) it ir (th - it - ib) in
+    let dst = rect (x + w - ir) (y + it) ir (w - it - ib) in
+    draw_texture_pro texture src dst (Vector2.create 0. 0.) 0. Color.white;
+    (* bottom right *)
+    let src = rect (tw - ir) (th - ib) ir ib in
+    let dst = rect (x + w - ir) (y + h - ib) ir ib in
+    draw_texture_pro texture src dst (Vector2.create 0. 0.) 0. Color.white;
+    (* bottom *)
+    let src = rect il (th - ib) (tw - il - ir) ib in
+    let dst = rect (x + il) (y + h - ib) (w - il - ir) ib in
+    draw_texture_pro texture src dst (Vector2.create 0. 0.) 0. Color.white;
+    (* bottom left *)
+    let src = rect 0 (th - ib) il ib in
+    let dst = rect x (y + h - ib) il ib in
+    draw_texture_pro texture src dst (Vector2.create 0. 0.) 0. Color.white;
+    (*  left *)
+    let src = rect 0 it il (th - it - ib) in
+    let dst = rect x (y + it) il (h - it - ib) in
+    draw_texture_pro texture src dst (Vector2.create 0. 0.) 0. Color.white
+;;

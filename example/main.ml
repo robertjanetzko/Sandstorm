@@ -38,8 +38,7 @@ module VampireWorld = struct
   let render_systems =
     [| Sprite_renderer.system
      ; Shape_renderer.system
-     ; Mob.health_bar_system
-     ; Collision.debug_system
+     ; Mob.health_bar_system (* ; Collision.debug_system *)
     |]
   ;;
 
