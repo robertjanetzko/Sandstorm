@@ -3,6 +3,7 @@ open Sandstorm_raylib_components
 open Raylib
 
 let match_mask m1 m2 = m1 land m2 > 0
+let pos_rec pos w h = Rectangle.create (Vector2.x pos) (Vector2.y pos) w h
 
 let overlap ?(new_p1 = None) id1 id2 =
   if id1 == id2
@@ -20,8 +21,11 @@ let overlap ?(new_p1 = None) id1 id2 =
     then false
     else (
       match s1.shape, s2.shape with
-      | Circle r1, Circle r2 -> Vector2.distance p1 p2 < r1 +. r2
-      | _ -> false))
+      | Circle r1, Circle r2 -> check_collision_circles p1 r1 p2 r2
+      | Circle r1, Rect (w2, h2) -> check_collision_circle_rec p1 r1 (pos_rec p2 w2 h2)
+      | Rect (w1, h1), Circle r2 -> check_collision_circle_rec p2 r2 (pos_rec p1 w1 h1)
+      | Rect (w1, h1), Rect (w2, h2) ->
+        check_collision_recs (pos_rec p1 w1 h1) (pos_rec p2 w2 h2)))
 ;;
 
 let detect id1 id2 =
@@ -32,8 +36,6 @@ let detect id1 id2 =
     s1.new_overlapping_entities <- id2 :: s1.new_overlapping_entities;
     s2.new_overlapping_entities <- id1 :: s2.new_overlapping_entities)
 ;;
-
-(* Collision_impact.set { other = id2; position = Position.get id1 } id1 *)
 
 module IdSet = Set.Make (Int)
 
@@ -53,7 +55,10 @@ let update_overlaps id (shp : Collision_shape.s) =
 ;;
 
 let system =
-  System.base (fun _state ->
+  System.base (fun () ->
+    query_each
+      (query (module Collision_impact))
+      (fun id _impact -> Collision_impact.remove id);
     Collision_shape.sort_axis ();
     let active = ref IdSet.empty in
     !Collision_shape.sorted_list
@@ -69,12 +74,6 @@ let system =
         else detect id1 id2);
       active := IdSet.add id1 !active);
     Collision_shape.iter update_overlaps)
-;;
-
-let cleanup_system =
-  System.for_each
-    (Sandstorm.query (module Collision_impact))
-    (fun id _impact -> Collision_impact.remove id)
 ;;
 
 let debug_system =

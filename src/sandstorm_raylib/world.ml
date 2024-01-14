@@ -36,11 +36,11 @@ module Make (W : WORLD) = struct
     let should_stop _state = window_should_close ()
 
     let runner =
-      System.base (fun state ->
+      System.base (fun () ->
         Music_streams.update_all ();
         Camera2D.set_offset camera (Vector2.scale (Window.size ()) 0.5);
         let process_systems systems =
-          Array.iter (fun (module S : System.Sig) -> S.process state) systems
+          Array.iter (fun (module S : System.Sig) -> S.process ()) systems
         in
         process_systems W.game_systems;
         begin_drawing ();

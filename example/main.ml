@@ -25,7 +25,6 @@ module VampireWorld = struct
           ; Player.player_died_system
           ; Health.death_system
           ; Projectile.system
-          ; Collision.cleanup_system
           ; Spawner.system
           ; Velocity.velocity_system
           ; Flip_sprite.flip_sprite_system
@@ -46,7 +45,7 @@ module VampireWorld = struct
 
   let setup () =
     Raylib.set_music_volume (Music_streams.get "resources/mini1111.xm") 0.3;
-    (* Raylib.play_music_stream @@ Music_streams.get "resources/mini1111.xm"; *)
+    Raylib.play_music_stream @@ Music_streams.get "resources/mini1111.xm";
     Util.Game.start ()
   ;;
 
