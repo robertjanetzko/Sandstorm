@@ -11,7 +11,7 @@ depends: [
   "ocaml"
   "dune" {>= "3.12"}
   "sandstorm"
-  "raylib"
+  "raylib" {>= "1.2.0"}
   "raygui"
   "odoc" {with-doc}
 ]
