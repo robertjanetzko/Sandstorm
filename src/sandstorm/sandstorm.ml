@@ -15,6 +15,7 @@ type 'a query = 'a Query.query
 let query_eval = Query.eval
 let query_matches = Query.is
 let query_each = Query.for_each
+let query_first = Query.first
 let query_iter = Query.iter
 let query = Query.query
 let ( ^& ) = Query.( ^& )

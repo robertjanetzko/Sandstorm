@@ -1,6 +1,3 @@
 (executable
- (public_name example2)
  (name main)
- (modes byte exe)
- (package sandstorm)
  (libraries sandstorm))

@@ -46,6 +46,16 @@ let for_each : type a. a query -> (int -> a) -> unit =
   | _ -> raise EmptyQuery
 ;;
 
+let first : type a. a query -> (int -> a) -> unit =
+  fun query f ->
+  match query with
+  | And ((module M), r) ->
+    (match M.first () with
+     | Some (id, _) -> if is id r then eval id query (f id) else ()
+     | None -> ())
+  | _ -> raise EmptyQuery
+;;
+
 let iter : type a. a query -> (int -> a) -> Entity.id_t list -> unit =
   fun query f list -> List.iter (fun id -> evaluate_query id (f id) query) list
 ;;

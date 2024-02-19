@@ -1,0 +1,3 @@
+(library
+ (name survival_components)
+ (libraries sandstorm.raylib survival_types))

@@ -22,6 +22,7 @@
 
 (package
  (name sandstorm_raylib)
+ (allow_empty)
  (synopsis "Ocaml game engine")
  (description
   "a prototype game engine written in OCaml using ECS and raylib")

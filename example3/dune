@@ -1,0 +1,3 @@
+(executable
+ (name main)
+ (libraries sandstorm.raylib survival_systems survival_util))

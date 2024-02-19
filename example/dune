@@ -1,6 +1,3 @@
 (executable
- (public_name example)
  (name main)
- (modes byte exe)
- (package sandstorm_raylib)
  (libraries sandstorm.raylib types components systems))
