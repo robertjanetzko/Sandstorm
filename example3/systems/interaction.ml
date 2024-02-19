@@ -5,13 +5,25 @@ open Raylib
 
 let system =
   System.for_each
-    ((module Position) ^? (module Interaction))
-    (fun _id pos interaction ->
-      query_first
-        ((module Position) ^? (module Player.Tag))
-        (fun _id player_pos _ ->
-          let in_range = Vector2.distance pos player_pos < interaction.range in
-          interaction.active <- in_range))
+    ((module Position) ^? (module Player.Tag))
+    (fun _id player_pos _ ->
+      let min_dist = ref Float.max_float in
+      let closest_interaction = ref None in
+      query_each
+        ((module Position) ^? (module Interaction))
+        (fun id pos interaction ->
+          interaction.active <- false;
+          let distance = Vector2.distance pos player_pos in
+          let in_range = distance < interaction.range in
+          if in_range && distance < !min_dist
+          then (
+            min_dist := distance;
+            closest_interaction := Some (id, interaction)));
+      match !closest_interaction with
+      | Some (id, interaction) ->
+        interaction.active <- true;
+        if Raylib.is_key_pressed Key.F then interaction.action id
+      | None -> ())
 ;;
 
 let ui_system =
