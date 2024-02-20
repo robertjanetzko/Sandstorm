@@ -6,18 +6,7 @@ open Raylib
 let system =
   System.create_group
     [| System.base Interaction.Active.clear
-     ; System.for_each
-         (query (module Interaction.Progress))
-         (fun id progress ->
-           let progress =
-             { progress with
-               value =
-                 max 0. (progress.value -. (progress.decay *. Raylib.get_frame_time ()))
-             }
-           in
-           if progress.value <= 0.
-           then Interaction.Progress.remove id
-           else Interaction.Progress.set progress id)
+     ; System.for_each (query (module Interaction.Progress)) Interaction.Progress.decay
      ; System.for_each
          ((module Position) ^? (module Player.Tag))
          (fun _id player_pos _ ->

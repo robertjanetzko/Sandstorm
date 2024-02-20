@@ -15,7 +15,7 @@ let create_obj x y =
     ; Interaction.create
         { range = 30.
         ; single = false
-        ; action = Interaction.progress ~max:2. ~decay:2. ~completion:on_interaction
+        ; action = Interaction.Progress.step ~max:2. ~decay:2. ~completion:on_interaction
         }
     ]
 ;;
