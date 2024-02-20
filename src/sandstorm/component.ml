@@ -12,6 +12,7 @@ module type Sig = sig
   val remove : Entity.id_t -> unit
   val all : unit -> Entity.id_t Seq.t
   val count : unit -> int
+  val clear : unit -> unit
 end
 
 let allComponents : (module Sig) list ref = ref []
@@ -30,6 +31,7 @@ let create (type s) () =
     let remove id = Hashtbl.remove data id
     let all () = Hashtbl.to_seq_keys data
     let count () = Hashtbl.length data
+    let clear () = Hashtbl.clear data
 
     let is id =
       match get_opt id with

@@ -8,11 +8,15 @@ let on_interaction id =
 ;;
 
 let create_obj x y =
+  let open Survival_components in
   Entity.create
     [ Position.create @@ Vector2.create x y
     ; Shape.create @@ Circle (10., Color.blue)
-    ; Survival_components.Interaction.create
-        { range = 30.; active = false; action = on_interaction }
+    ; Interaction.create
+        { range = 30.
+        ; single = false
+        ; action = Interaction.progress ~max:2. ~decay:2. ~completion:on_interaction
+        }
     ]
 ;;
 
